@@ -24,7 +24,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
     public void openActivity(){
-        Intent intent2 = new Intent(this, MainActivity.class);
+        Intent intent2 = new Intent(this, MainActivity3.class);
         startActivity(intent2);
     }
     public void openActivityPic(){

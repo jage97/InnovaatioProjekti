@@ -11,28 +11,28 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonA2;
     private Button buttonPic;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
 
-        buttonA2 = (Button) findViewById(R.id.buttonA2);
-        buttonA2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity2();
-            }
-        });
-        buttonPic = (Button) findViewById(R.id.buttonPic);
-        buttonPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivityPic();
-            }
-        });
+            buttonA2 = (Button) findViewById(R.id.buttonA2);
+            buttonA2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openActivity2();
+                }
+            });
+            buttonPic = (Button) findViewById(R.id.buttonPic);
+            buttonPic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openActivityPic();
+                }
+            });
 
-    }
-    public void openActivity2(){
+        }
+        public void openActivity2(){
         Intent intent2 = new Intent(this, MainActivity2.class);
         startActivity(intent2);
     }
