@@ -1,7 +1,12 @@
 package com.example.myapplication;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,7 +84,31 @@ public class sportList extends AppCompatActivity {
     }
     private void showData() {
         adapter = new Adapter(this, titles, addresses, cities, sports);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_scrolling, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.kayttaja:
+                Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.rajaa:
+                Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.kartta:
+                Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
