@@ -7,11 +7,32 @@
         android:orderInCategory="100"
         android:title="Käyttäjä"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/rajaa"
+        android:id="@+id/rajaus"
         android:orderInCategory="100"
         android:title="Rajaus"
-        app:showAsAction="never" />
+        app:showAsAction="never">
+        <menu>
+           <item
+               android:id="@+id/rajaus1"
+               android:orderInCategory="100"
+               android:title="Rajaus1"
+               app:showAsAction="never"/>
+            <item
+                android:id="@+id/rajaus2"
+                android:orderInCategory="100"
+                android:title="Rajaus2"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/rajaus3"
+                android:orderInCategory="100"
+                android:title="Rajaus3"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
+
     <item
         android:id="@+id/kartta"
         android:orderInCategory="100"

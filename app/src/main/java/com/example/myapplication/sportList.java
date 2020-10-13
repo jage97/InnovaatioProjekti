@@ -4,9 +4,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +38,11 @@ public class sportList extends AppCompatActivity {
     AsyncHttpClient client;
     Workbook workbook;
     List<String> titles, addresses, cities, sports;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private EditText kayttaja, salasana;
+    private Button kirjauduButton, exitButton, rekButton;
+
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -100,15 +109,59 @@ public class sportList extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.kayttaja:
                 Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
+                createNewContactDialog();
                 return true;
-            case R.id.rajaa:
-                Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
-                return true;
+            case R.id.rajaus:
+            Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
+            return true;
             case R.id.kartta:
                 Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
                 return true;
-            default:
+            case R.id.rajaus1:
+                Toast.makeText(this, "rajaa 1 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.rajaus2:
+                Toast.makeText(this, "rajaa 2 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.rajaus3:
+                Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+
+                default:
                 return super.onOptionsItemSelected(item);
         }
     }
+    public void createNewContactDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
+        kayttaja = (EditText) contactPopupView.findViewById(R.id.kayttaja);
+        salasana = (EditText) contactPopupView.findViewById(R.id.salasana);
+        kirjauduButton = (Button) contactPopupView.findViewById(R.id.kirjauduButton);
+        exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
+        rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
+
+        dialogBuilder.setView(contactPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        kirjauduButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sisaankirjautuminen tahan
+            }
+        });
+        rekButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //rekisterointi tahan
+            }
+        });
+    }
+
 }
