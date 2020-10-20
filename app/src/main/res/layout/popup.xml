@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/kayttaja"
+        android:id="@+id/user"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -20,14 +20,14 @@
         android:singleLine="false"
         android:textSize="24sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/salasana"
+        app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/salasana"
+        android:id="@+id/password"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -41,10 +41,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kayttaja" />
+        app:layout_constraintTop_toBottomOf="@+id/user" />
 
     <Button
-        android:id="@+id/kirjauduButton"
+        android:id="@+id/loginButton"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
@@ -55,7 +55,7 @@
         android:hint="Kirjaudu"
         app:layout_constraintEnd_toStartOf="@+id/exitButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/salasana" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
         android:id="@+id/exitButton"
@@ -65,8 +65,8 @@
         android:layout_marginLeft="100dp"
         android:layout_marginTop="52dp"
         android:hint="Peruuta"
-        app:layout_constraintStart_toEndOf="@+id/kirjauduButton"
-        app:layout_constraintTop_toBottomOf="@+id/salasana" />
+        app:layout_constraintStart_toEndOf="@+id/loginButton"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
         android:id="@+id/rekButton"
