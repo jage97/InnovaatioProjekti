@@ -40,8 +40,8 @@ public class sportList extends AppCompatActivity {
     List<String> titles, addresses, cities, sports;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
-    private EditText kayttaja, salasana;
-    private Button kirjauduButton, exitButton, rekButton;
+    private EditText user, password;
+    private Button loginButton, exitButton, rekButton;
 
     @Override
     protected void onCreate(android.os.Bundle savedInstanceState){
@@ -107,24 +107,27 @@ public class sportList extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.kayttaja:
+            case R.id.user:
                 Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
                 createNewContactDialog();
                 return true;
-            case R.id.rajaus:
+            case R.id.filter:
             Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
             return true;
-            case R.id.kartta:
+            case R.id.map:
                 Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.rajaus1:
+            case R.id.filter1:
                 Toast.makeText(this, "rajaa 1 painettu", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.rajaus2:
+            case R.id.filter2:
                 Toast.makeText(this, "rajaa 2 painettu", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.rajaus3:
+            case R.id.filter3:
                 Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.search:
+                Toast.makeText(this, "haku painettu", Toast.LENGTH_SHORT).show();
                 return true;
 
                 default:
@@ -134,9 +137,9 @@ public class sportList extends AppCompatActivity {
     public void createNewContactDialog(){
         dialogBuilder = new AlertDialog.Builder(this);
         final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
-        kayttaja = (EditText) contactPopupView.findViewById(R.id.kayttaja);
-        salasana = (EditText) contactPopupView.findViewById(R.id.salasana);
-        kirjauduButton = (Button) contactPopupView.findViewById(R.id.kirjauduButton);
+        user = (EditText) contactPopupView.findViewById(R.id.user);
+        password = (EditText) contactPopupView.findViewById(R.id.password);
+        loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
         exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
         rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
 
@@ -150,7 +153,7 @@ public class sportList extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        kirjauduButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //sisaankirjautuminen tahan

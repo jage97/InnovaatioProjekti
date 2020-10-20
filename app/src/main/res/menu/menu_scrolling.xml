@@ -3,29 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.myapplication.ScrollingActivity">
     <item
-        android:id="@+id/kayttaja"
+        android:id="@+id/user"
         android:orderInCategory="100"
         android:title="Käyttäjä"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/rajaus"
+        android:id="@+id/filter"
         android:orderInCategory="100"
         android:title="Rajaus"
         app:showAsAction="never">
         <menu>
            <item
-               android:id="@+id/rajaus1"
+               android:id="@+id/filter1"
                android:orderInCategory="100"
                android:title="Rajaus1"
                app:showAsAction="never"/>
             <item
-                android:id="@+id/rajaus2"
+                android:id="@+id/filter2"
                 android:orderInCategory="100"
                 android:title="Rajaus2"
                 app:showAsAction="never"/>
             <item
-                android:id="@+id/rajaus3"
+                android:id="@+id/filter3"
                 android:orderInCategory="100"
                 android:title="Rajaus3"
                 app:showAsAction="never"/>
@@ -34,8 +34,13 @@
 
 
     <item
-        android:id="@+id/kartta"
+        android:id="@+id/map"
         android:orderInCategory="100"
         android:title="Kartta"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/search"
+        android:orderInCategory="100"
+        android:title="Haku"
         app:showAsAction="never" />
 </menu>
