@@ -16,15 +16,88 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/icon3"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon2"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <ImageView
+                android:id="@+id/icon4"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon3"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <ImageView
+                android:id="@+id/icon5"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon4"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/icon6"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon5"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/icon1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/city"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageView
+                android:id="@+id/icon2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon1"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="19dp"
                 android:layout_marginRight="19dp"
+                android:maxLength="44"
                 android:text="Lauttasaaren liikuntapuisto / Tekojääkaukalo"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/status"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -35,50 +108,92 @@
                 android:id="@+id/city"
                 android:layout_width="81dp"
                 android:layout_height="21dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
                 android:text="Helsinki"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/games"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:textSize="15dp"
+                android:maxLength="11"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintEnd_toStartOf="@+id/icon1"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/games"
-                android:layout_width="302dp"
-                android:layout_height="21dp"
-                android:layout_marginTop="2dp"
-                android:text="Different game icons here"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
                 android:contentDescription="TODO"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title"
-                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_baseline_location_on_24" />
 
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
-                android:layout_marginRight="36dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
                 android:text="CLOSED"
                 android:textColor="#CD0101"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/textView2"
+                android:layout_alignParentRight="true"
+                android:background="#808080"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/icon3" />
+
+            <ImageView
+                android:id="@+id/icon7"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon6"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageView
+                android:id="@+id/icon8"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon7"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageView
+                android:id="@+id/icon9"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toTopOf="@+id/view1"
+                app:layout_constraintStart_toEndOf="@+id/icon8"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintVertical_bias="0.0" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

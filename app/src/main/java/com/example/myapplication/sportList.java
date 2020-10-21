@@ -1,5 +1,15 @@
 package com.example.myapplication;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,18 +22,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.FileHandler;
 
 import cz.msebera.android.httpclient.Header;
 import jxl.Cell;
@@ -32,32 +43,49 @@ import jxl.Sheet;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 
+import static android.content.ContentValues.TAG;
+
 public class sportList extends AppCompatActivity {
     RecyclerView recyclerView;
     Adapter adapter;
     AsyncHttpClient client;
     Workbook workbook;
     List<String> titles, addresses, cities, sports;
+    List<LatLng> coordinates;
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private EditText user, password;
     private Button loginButton, exitButton, rekButton;
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            //your code here
+        }
+    };
+    LocationManager locationManager;
+    private int[] images = {R.drawable.tennis, R.drawable.football, R.drawable.hockey, R.drawable.boxing, R.drawable.athletics, R.drawable.wrestling};
 
     @Override
-    protected void onCreate(android.os.Bundle savedInstanceState){
+    protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sportlist);
-
         String url = "https://github.com/jage97/InnovaatioProjekti/blob/new-master/sportPlaces.xls?raw=true";
-
         recyclerView = findViewById(R.id.listOfSport);
-
         titles = new ArrayList<>();
         addresses = new ArrayList<>();
+        coordinates = new ArrayList<>();
         cities = new ArrayList<>();
         sports = new ArrayList<>();
-
         client = new AsyncHttpClient();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
+                0, mLocationListener);
+
+        getLocation();
         client.get(url, new FileAsyncHttpResponseHandler(this) {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
@@ -78,10 +106,11 @@ public class sportList extends AppCompatActivity {
                             addresses.add(row[1].getContents());
                             cities.add(row[2].getContents());
                             sports.add(row[3].getContents());
-
                         };
+                        for(int i = 0;i <addresses.size();i++) {
+                            coordinates.add(getLocationFromAddress("Huvilaharju 3 Espoo finland"));
+                        }
                         showData();
-                        Log.d("TAG","onSuccess: "+titles);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (BiffException e) {
@@ -92,7 +121,7 @@ public class sportList extends AppCompatActivity {
         });
     }
     private void showData() {
-        adapter = new Adapter(this, titles, addresses, cities, sports);
+        adapter = new Adapter(this, titles, addresses, cities, sports, images, getLocation(),coordinates);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
     }
@@ -166,5 +195,86 @@ public class sportList extends AppCompatActivity {
             }
         });
     }
+    String getLocation() {
+        String sLocation = "";
+        LatLng coordinates = null;;
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( (Activity) this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+        }else{
+            Location location = locationManager.getLastKnownLocation( LocationManager.NETWORK_PROVIDER );
+            if(location != null){
+                double lati = location.getLatitude();
+                double longi = location.getLongitude();
+               // Log.e(TAG,"Location :" +lati+ " ,"+longi );
+                sLocation = lati+"";
+                Log.e(TAG,"Location :" + sLocation );
 
+            } else {
+                boolean isNetworkAvailable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                if(isNetworkAvailable) fetchCurrentLocation();
+            }
+        }
+        Log.e(TAG,"Locatio2n :" + sLocation );
+        return sLocation;
+    }
+    void fetchCurrentLocation() {
+        try {
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(final Location location) {
+                    if (location != null) {
+                        locationManager.removeUpdates(this);
+                        double lati = location.getLatitude();
+                        double longi = location.getLongitude();
+
+                        //Log.e(TAG,"Location :" +lati+ " ,"+longi );
+                    }
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+                    locationManager.removeUpdates(this);
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+                }
+            };
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500L,30f, locationListener);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+    public LatLng getLocationFromAddress(String strAddress){
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+
+            address = coder.getFromLocationName(strAddress,5);
+
+            if (address==null) {
+
+                return null;
+            }
+            Address location=address.get(0);
+
+
+            //Log.e(TAG,"JUMALAUTA :" + location.getLatitude() + " , "+ location.getLongitude());
+            p1 = new LatLng((double) (location.getLatitude() ),
+                    (double) (location.getLongitude()));
+
+            return p1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return p1;
+    }
 }
