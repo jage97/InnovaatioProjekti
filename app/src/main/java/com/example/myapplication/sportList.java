@@ -79,11 +79,10 @@ public class sportList extends AppCompatActivity {
         client = new AsyncHttpClient();
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
-                0, mLocationListener);
+       if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+           return;
+       }
+       //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
 
         getLocation();
         client.get(url, new FileAsyncHttpResponseHandler(this) {
@@ -106,9 +105,9 @@ public class sportList extends AppCompatActivity {
                             addresses.add(row[1].getContents());
                             cities.add(row[2].getContents());
                             sports.add(row[3].getContents());
-                        };
+                        }
                         for(int i = 0;i <addresses.size();i++) {
-                            coordinates.add(getLocationFromAddress("Huvilaharju 3 Espoo finland"));
+                            coordinates.add(getLocationFromAddress("Matinraitti 5 Espoo finland"));
                         }
                         showData();
                     } catch (IOException e) {
@@ -155,8 +154,9 @@ public class sportList extends AppCompatActivity {
             case R.id.filter3:
                 Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
                 return true;
+
             case R.id.search:
-                Toast.makeText(this, "haku painettu", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Haku", Toast.LENGTH_SHORT).show();
                 return true;
 
                 default:
@@ -164,23 +164,23 @@ public class sportList extends AppCompatActivity {
         }
     }
     public void createNewContactDialog(){
-        dialogBuilder = new AlertDialog.Builder(this);
-        final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
-        user = (EditText) contactPopupView.findViewById(R.id.user);
-        password = (EditText) contactPopupView.findViewById(R.id.password);
-        loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
-        exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
-        rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
+                dialogBuilder = new AlertDialog.Builder(this);
+                final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
+                user = (EditText) contactPopupView.findViewById(R.id.user);
+                password = (EditText) contactPopupView.findViewById(R.id.password);
+                loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
+                exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
+                rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
 
-        dialogBuilder.setView(contactPopupView);
-        dialog = dialogBuilder.create();
-        dialog.show();
+                dialogBuilder.setView(contactPopupView);
+                dialog = dialogBuilder.create();
+                dialog.show();
 
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+                exitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
         });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +197,7 @@ public class sportList extends AppCompatActivity {
     }
     String getLocation() {
         String sLocation = "";
-        LatLng coordinates = null;;
+        LatLng coordinates = null;
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions( (Activity) this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }else{
