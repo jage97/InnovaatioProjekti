@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,12 +31,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import jxl.Cell;
@@ -55,17 +53,39 @@ public class sportList extends AppCompatActivity {
     Workbook workbook;
     List<String> titles, addresses, cities, sports;
     List<LatLng> coordinates;
-    private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
-    private AlertDialog dialog, dialogInfo;
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
     private EditText user, password;
     private Button loginButton, exitButton, rekButton;
-
-
+    LatLng curLock = new LatLng((double) (2.5),
+            (double) (6.7));;
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
             //your code here
+            if (location == null) {
+                curLock = new LatLng((double) (2.5),
+                        (double) (6.7));
+            } else{
+                curLock = new LatLng((double) (location.getLatitude()),
+                        (double) (location.getLongitude()));
+            }
         }
+        @Override
+        public void onProviderDisabled(String s) {
+            locationManager.removeUpdates(this);
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
     };
     LocationManager locationManager;
     private int[] images = {R.drawable.tennis, R.drawable.football, R.drawable.hockey, R.drawable.boxing, R.drawable.athletics, R.drawable.wrestling};
@@ -84,12 +104,15 @@ public class sportList extends AppCompatActivity {
         client = new AsyncHttpClient();
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-       if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-           return;
-       }
-       //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( (Activity) this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
+                0, mLocationListener);
 
-        getLocation();
+        Location location = locationManager.getLastKnownLocation( LocationManager.NETWORK_PROVIDER );
+        Log.e(TAG,"JUMALAUTAERIRISEJRIOES:" + location.getLatitude() + " , "+ location.getLongitude());
+        //getLocation();
         client.get(url, new FileAsyncHttpResponseHandler(this) {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
@@ -110,10 +133,14 @@ public class sportList extends AppCompatActivity {
                             addresses.add(row[1].getContents());
                             cities.add(row[2].getContents());
                             sports.add(row[3].getContents());
+                        };
+                        for(int i = 0;i <5;i++) {
+                            coordinates.add(getLocationFromAddress(addresses.get(i) + " " + cities.get(i)));
                         }
-                        for(int i = 0;i <addresses.size();i++) {
-                            coordinates.add(getLocationFromAddress("Matinraitti 5 Espoo finland"));
+                        for(int i = 4;i < addresses.size();i++) {
+                                coordinates.add(getLocationFromAddress("Huvilaharju 3 Espoo finland"));
                         }
+
                         showData();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -124,27 +151,10 @@ public class sportList extends AppCompatActivity {
             }
         });
     }
-    public void changeItem(int position) {
-        String str1 = Integer.toString(position);
-        Toast.makeText(this, str1, Toast.LENGTH_SHORT).show();
-
-
-    }
-
-
     private void showData() {
         adapter = new Adapter(this, titles, addresses, cities, sports, images, getLocation(),coordinates);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
-
-
-                adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        changeItem(position);
-                        createNewContactDialogInfo(position);
-                    }
-                });
     }
 
     @Override
@@ -159,7 +169,7 @@ public class sportList extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.user:
                 Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
-                createNewContactDialogLogin();
+                createNewContactDialog();
                 return true;
             case R.id.filter:
             Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
@@ -176,48 +186,32 @@ public class sportList extends AppCompatActivity {
             case R.id.filter3:
                 Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
                 return true;
-
             case R.id.search:
-                Toast.makeText(this, "Haku", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "haku painettu", Toast.LENGTH_SHORT).show();
                 return true;
 
                 default:
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void createNewContactDialogInfo(int position){
-        dialogBuilderInfo = new AlertDialog.Builder(this);
-        final View contactPopupViewInfo = getLayoutInflater().inflate(R.layout.popupinfo, null);
-        dialogBuilderInfo.setView(contactPopupViewInfo);
+    public void createNewContactDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
+        user = (EditText) contactPopupView.findViewById(R.id.user);
+        password = (EditText) contactPopupView.findViewById(R.id.password);
+        loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
+        exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
+        rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
 
-        String temp = titles.get(position);
+        dialogBuilder.setView(contactPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
 
-        final TextView textTitle = (TextView)findViewById(R.id.textTitle);
-        //textTitle.setText("hrt");
-
-        dialogBuilderInfo.setMessage(temp);
-        dialogInfo = dialogBuilderInfo.create();
-        dialogInfo.show();
-    }
-
-    public void createNewContactDialogLogin(){
-                dialogBuilderLogin = new AlertDialog.Builder(this);
-                final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
-                user = (EditText) contactPopupView.findViewById(R.id.user);
-                password = (EditText) contactPopupView.findViewById(R.id.password);
-                loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
-                exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
-                rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
-
-                dialogBuilderLogin.setView(contactPopupView);
-                dialog = dialogBuilderLogin.create();
-                dialog.show();
-
-                exitButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
         });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,9 +226,32 @@ public class sportList extends AppCompatActivity {
             }
         });
     }
-    String getLocation() {
+    LatLng getLocation(){
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( (Activity) this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+        }else{
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
+                    0, mLocationListener);
+
+            /*Location address = mlocationManager.getLastKnownLocation( LocationManager.NETWORK_PROVIDER );
+            if (address==null) {
+                Log.e(TAG,"JUMALAUTA :");
+                return null;
+            }
+
+            Log.e(TAG,"JUMALAUTA :" + location.getLatitude() + " , "+ location.getLongitude());
+            p1 = new LatLng((double) (address.getLatitude() ),
+                    (double) (address.getLongitude()));
+            */
+        }
+        Log.e(TAG,"JUMALAUTA :" + curLock.latitude + " , "+ curLock.longitude);
+        return curLock;
+    }
+  /* String getLocation() {
         String sLocation = "";
-        LatLng coordinates = null;
+        LatLng coordinates = null;;
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions( (Activity) this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }else{
@@ -248,10 +265,16 @@ public class sportList extends AppCompatActivity {
 
             } else {
                 boolean isNetworkAvailable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                if(isNetworkAvailable) fetchCurrentLocation();
+                Log.e(TAG,"GETGUD1");
+
+                if(isNetworkAvailable) {
+                    Log.e(TAG,"GETGUD2");
+                    fetchCurrentLocation();
+                }
             }
         }
         Log.e(TAG,"Locatio2n :" + sLocation );
+
         return sLocation;
     }
     void fetchCurrentLocation() {
@@ -264,8 +287,10 @@ public class sportList extends AppCompatActivity {
                         double lati = location.getLatitude();
                         double longi = location.getLongitude();
 
-                        //Log.e(TAG,"Location :" +lati+ " ,"+longi );
+                        Log.e(TAG,"Location for real :" +lati+ " ,"+longi );
                     }
+                    Log.e(TAG,"Location for real :");
+
                 }
 
                 @Override
@@ -286,7 +311,7 @@ public class sportList extends AppCompatActivity {
         } catch (SecurityException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     public LatLng getLocationFromAddress(String strAddress){
 
         Geocoder coder = new Geocoder(this);
