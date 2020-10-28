@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.model.LatLng;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,10 +55,12 @@ public class sportList extends AppCompatActivity {
     Workbook workbook;
     List<String> titles, addresses, cities, sports;
     List<LatLng> coordinates;
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
+    private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
+    private AlertDialog dialog, dialogInfo;
     private EditText user, password;
     private Button loginButton, exitButton, rekButton;
+
+
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -119,10 +124,27 @@ public class sportList extends AppCompatActivity {
             }
         });
     }
+    public void changeItem(int position) {
+        String str1 = Integer.toString(position);
+        Toast.makeText(this, str1, Toast.LENGTH_SHORT).show();
+
+
+    }
+
+
     private void showData() {
         adapter = new Adapter(this, titles, addresses, cities, sports, images, getLocation(),coordinates);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
+
+
+                adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        changeItem(position);
+                        createNewContactDialogInfo(position);
+                    }
+                });
     }
 
     @Override
@@ -137,7 +159,7 @@ public class sportList extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.user:
                 Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
-                createNewContactDialog();
+                createNewContactDialogLogin();
                 return true;
             case R.id.filter:
             Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
@@ -163,8 +185,23 @@ public class sportList extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void createNewContactDialog(){
-                dialogBuilder = new AlertDialog.Builder(this);
+    public void createNewContactDialogInfo(int position){
+        dialogBuilderInfo = new AlertDialog.Builder(this);
+        final View contactPopupViewInfo = getLayoutInflater().inflate(R.layout.popupinfo, null);
+        dialogBuilderInfo.setView(contactPopupViewInfo);
+
+        String temp = titles.get(position);
+
+        final TextView textTitle = (TextView)findViewById(R.id.textTitle);
+        //textTitle.setText("hrt");
+
+        dialogBuilderInfo.setMessage(temp);
+        dialogInfo = dialogBuilderInfo.create();
+        dialogInfo.show();
+    }
+
+    public void createNewContactDialogLogin(){
+                dialogBuilderLogin = new AlertDialog.Builder(this);
                 final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
                 user = (EditText) contactPopupView.findViewById(R.id.user);
                 password = (EditText) contactPopupView.findViewById(R.id.password);
@@ -172,8 +209,8 @@ public class sportList extends AppCompatActivity {
                 exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
                 rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
 
-                dialogBuilder.setView(contactPopupView);
-                dialog = dialogBuilder.create();
+                dialogBuilderLogin.setView(contactPopupView);
+                dialog = dialogBuilderLogin.create();
                 dialog.show();
 
                 exitButton.setOnClickListener(new View.OnClickListener() {

@@ -46,8 +46,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     String location;
     LocationManager locationManager;
     int[] images;
+    private OnItemClickListener mListener;
 
 
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+    mListener = listener;
+    }
+
+    public void changeInfo(String text){
+        location = text;
+    }
 
     public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location, List<LatLng> coordinates) {
         this.inflater = LayoutInflater.from(context);
@@ -65,7 +77,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.custom_layout, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mListener);
     }
 
     @Override
@@ -95,7 +107,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         TextView title, city;
         ImageView sportIcon1, sportIcon2, sportIcon3, sportIcon4, sportIcon5, sportIcon6;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             sportIcon1 = itemView.findViewById(R.id.icon1);
             sportIcon2 = itemView.findViewById(R.id.icon2);
@@ -107,6 +119,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             title = itemView.findViewById(R.id.title);
             city = itemView.findViewById(R.id.city);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
     private String distance(double lat1, double long1, double lat2, double long2){
