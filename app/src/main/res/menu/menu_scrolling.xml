@@ -2,6 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.myapplication.ScrollingActivity">
+
+
+
     <item
         android:id="@+id/user"
         android:orderInCategory="100"
@@ -38,9 +41,11 @@
         android:orderInCategory="100"
         android:title="Kartta"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/search"
-        android:orderInCategory="100"
+        android:icon="@drawable/ic_search"
         android:title="Haku"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom"/>
+
 </menu>

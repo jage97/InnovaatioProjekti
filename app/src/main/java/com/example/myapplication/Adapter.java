@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.location.Location;
@@ -29,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,6 +47,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     LocationManager locationManager;
     int[] images;
 
+
+
     public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location, List<LatLng> coordinates) {
         this.inflater = LayoutInflater.from(context);
         this.titles = titles;
@@ -53,6 +58,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         this.images = images;
         this.coordinates = coordinates;
         this.location = location;
+
     }
 
     @NonNull
@@ -68,7 +74,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         Log.d("TAG","60.251028 24.771102" + " + " + coordinates.get(position).latitude +" + "+ coordinates.get(position).longitude);
         String city = distance(coordinates.get(position).latitude, coordinates.get(position).longitude,60.242233000000006,24.771102);
-        //String city = "fsfs";
+     //   String city = "fsfs";
         holder.sportIcon1.setImageResource(images[0]);
         holder.sportIcon2.setImageResource(images[1]);
         holder.sportIcon3.setImageResource(images[2]);
@@ -78,6 +84,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.title.setText(title);
         holder.city.setText(city);
     }
+
 
     @Override
     public int getItemCount() {
@@ -127,6 +134,5 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return (lat1*Math.PI/180.0);
     }
 
-    ;
 }
 
