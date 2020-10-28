@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.location.Location;
@@ -29,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,26 +43,41 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     List<String> titles, addresses, cities;
     List<String> sports;
     List<LatLng> coordinates;
-    LatLng location;
+    String location;
     LocationManager locationManager;
     int[] images;
+    private OnItemClickListener mListener;
 
-    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, LatLng location, List<LatLng> coordinates) {
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
+
+    public void changeInfo(String text){
+        location = text;
+    }
+
+    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location, List<LatLng> coordinates) {
         this.inflater = LayoutInflater.from(context);
         this.titles = titles;
         this.addresses = addresses;
         this.cities = cities;
         this.sports = sports;
         this.images = images;
-        this.coordinates = coordinates; //destination
-        this.location = location; //current location
+        this.coordinates = coordinates;
+        this.location = location;
+
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.custom_layout, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mListener);
     }
 
     @Override
@@ -68,7 +86,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         Log.d("TAG","60.251028 24.771102" + " + " + coordinates.get(position).latitude +" + "+ coordinates.get(position).longitude);
         String city = distance(coordinates.get(position).latitude, coordinates.get(position).longitude,60.242233000000006,24.771102);
-        //String city = "fsfs";
+        //   String city = "fsfs";
         holder.sportIcon1.setImageResource(images[0]);
         holder.sportIcon2.setImageResource(images[1]);
         holder.sportIcon3.setImageResource(images[2]);
@@ -79,6 +97,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.city.setText(city);
     }
 
+
     @Override
     public int getItemCount() {
         return titles.size();
@@ -88,7 +107,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         TextView title, city;
         ImageView sportIcon1, sportIcon2, sportIcon3, sportIcon4, sportIcon5, sportIcon6;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             sportIcon1 = itemView.findViewById(R.id.icon1);
             sportIcon2 = itemView.findViewById(R.id.icon2);
@@ -100,6 +119,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             title = itemView.findViewById(R.id.title);
             city = itemView.findViewById(R.id.city);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
     private String distance(double lat1, double long1, double lat2, double long2){
@@ -127,6 +157,4 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return (lat1*Math.PI/180.0);
     }
 
-    ;
 }
-
