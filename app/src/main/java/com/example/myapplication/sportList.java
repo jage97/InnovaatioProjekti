@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -74,6 +75,7 @@ public class sportList extends AppCompatActivity {
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sportlist);
+        dialogBuilderInfo = new AlertDialog.Builder(this);
         String url = "https://github.com/jage97/InnovaatioProjekti/blob/new-master/sportPlaces.xls?raw=true";
         recyclerView = findViewById(R.id.listOfSport);
         titles = new ArrayList<>();
@@ -142,7 +144,9 @@ public class sportList extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 changeItem(position);
-                createNewContactDialogInfo(position);
+                Intent intent = new Intent(getApplicationContext(),recyclerClass.class);
+                intent.putExtra("title", titles.get(position));
+                startActivity(intent);
             }
         });
     }
@@ -185,20 +189,21 @@ public class sportList extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void createNewContactDialogInfo(int position){
+  /*  public void createNewContactDialogInfo(int position){
         dialogBuilderInfo = new AlertDialog.Builder(this);
-        final View contactPopupViewInfo = getLayoutInflater().inflate(R.layout.popupinfo, null);
+        View contactPopupViewInfo = getLayoutInflater().inflate(R.layout.popupinfo, null);
         dialogBuilderInfo.setView(contactPopupViewInfo);
 
+
+
         String temp = titles.get(position);
-
-        final TextView textTitle = (TextView)findViewById(R.id.textTitle);
+        final  TextView  textTitle = (TextView)findViewById(R.id.textTitle);
         //textTitle.setText("hrt");
-
-        dialogBuilderInfo.setMessage(temp);
+        //textTitle.setText(temp);
+        dialogInfo.setView(textTitle);
         dialogInfo = dialogBuilderInfo.create();
         dialogInfo.show();
-    }
+    }*/
 
     public void createNewContactDialogLogin(){
         dialogBuilderLogin = new AlertDialog.Builder(this);

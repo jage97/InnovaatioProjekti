@@ -86,7 +86,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         Log.d("TAG","60.251028 24.771102" + " + " + coordinates.get(position).latitude +" + "+ coordinates.get(position).longitude);
         String city = distance(coordinates.get(position).latitude, coordinates.get(position).longitude,60.242233000000006,24.771102);
-        //   String city = "fsfs";
+        //String city = "fsfs";
         holder.sportIcon1.setImageResource(images[0]);
         holder.sportIcon2.setImageResource(images[1]);
         holder.sportIcon3.setImageResource(images[2]);
