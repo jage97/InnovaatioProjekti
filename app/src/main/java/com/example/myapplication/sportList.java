@@ -37,6 +37,7 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,8 @@ public class sportList extends AppCompatActivity {
     Adapter adapter;
     AsyncHttpClient client;
     Workbook workbook;
-    List<String> titles, addresses, cities, sports;
+    //Excel
+    List<String> titles, addresses, cities, sports, websites, regi, managers, supervisor, moreInfo;
     List<LatLng> coordinates;
     private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
     private AlertDialog dialog, dialogInfo;
@@ -76,13 +78,22 @@ public class sportList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sportlist);
         dialogBuilderInfo = new AlertDialog.Builder(this);
-        String url = "https://github.com/jage97/InnovaatioProjekti/blob/new-master/sportPlaces.xls?raw=true";
+        String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikko.xls?raw=true";
+
         recyclerView = findViewById(R.id.listOfSport);
-        titles = new ArrayList<>();
-        addresses = new ArrayList<>();
+        //Excel fetch
+        titles = new ArrayList<>();     //row 0
+        addresses = new ArrayList<>();  //row 1
+        cities = new ArrayList<>();     //row 2
+        websites = new ArrayList<>();   //row 3
+        sports = new ArrayList<>();     //row 4
+        regi = new ArrayList<>();       //row 5
+        managers = new ArrayList<>();   //row 6
+        supervisor = new ArrayList<>(); //row 7 & 8
+        moreInfo = new ArrayList<>();   //row 9
+
+
         coordinates = new ArrayList<>();
-        cities = new ArrayList<>();
-        sports = new ArrayList<>();
         client = new AsyncHttpClient();
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -108,10 +119,19 @@ public class sportList extends AppCompatActivity {
                         Sheet sheet = workbook.getSheet(0);
                         for(int i = 1;i < sheet.getRows();i++){
                             Cell[] row = sheet.getRow(i);
+                            for(int s= 0;s< row.length;s++){
+                                if(row[s].getType() == null){
+                                }
+                            }
                             titles.add(row[0].getContents());
                             addresses.add(row[1].getContents());
                             cities.add(row[2].getContents());
-                            sports.add(row[3].getContents());
+                            websites.add("Verkkosivut: "+row[3].getContents() + "\n");
+                            sports.add(row[4].getContents());
+                            regi.add("Kassa: "+row[5].getContents()+ "\n");
+                            managers.add("Liikuntapaikanhoitajat: " + row[6].getContents()+ "\n");
+                            supervisor.add("Tiimiesimies: " + row[7].getContents() + " " + row[8].getContents());
+                            moreInfo.add(row[9].getContents());
                         }
                         for(int i = 0;i <addresses.size();i++) {
                             coordinates.add(getLocationFromAddress("Matinraitti 5 Espoo finland"));
@@ -146,6 +166,11 @@ public class sportList extends AppCompatActivity {
                 changeItem(position);
                 Intent intent = new Intent(getApplicationContext(),recyclerClass.class);
                 intent.putExtra("title", titles.get(position));
+                intent.putExtra("address", addresses.get(position) +" " +cities.get(position));
+                intent.putExtra("sport", sports.get(position));
+                intent.putExtra("numbers", regi.get(position) + managers.get(position) + supervisor.get(position));
+                intent.putExtra("moreInfo", websites.get(position)+moreInfo.get(position));
+
                 startActivity(intent);
             }
         });

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,94 +9,116 @@
     <TextView
         android:id="@+id/textView11"
         android:layout_width="402dp"
-        android:layout_height="71dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
         android:autoLink="web"
         android:linksClickable="true"
-        android:text="Website https://palvelukartta.hel.fi/fi/unit/40029 \nMaksullinen"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="361dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="410dp"
-        android:layout_height="82dp"
-        android:gravity="center"
-        android:text="Lauttasaaren liikuntapuisto / Tekojääkaukalo"
+        android:layout_height="wrap_content"
+        android:gravity="center|top"
         android:textSize="30sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-1dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="412dp"
         android:layout_height="254dp"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="477dp" />
+        android:layout_marginTop="43dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="404dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
         android:text="Phone numbers"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="240dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="405dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
         android:text="More information"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="336dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lahnalahdentie 4 Helsinki"
+        android:layout_width="411dp"
+        android:layout_height="23dp"
+        android:gravity="center"
         android:textSize="18sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="102dp"
-        tools:layout_editor_absoluteY="82dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="18dp"
         android:text="Sports"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="144dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AVOINNA" />
 
     <TextView
         android:id="@+id/AVOINNA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="410dp"
+        android:layout_height="21dp"
+        android:gravity="center"
         android:text="CLOSED"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="172dp"
-        tools:layout_editor_absoluteY="109dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="400dp"
-        android:layout_height="70dp"
-        android:text="Sisällä enimmäkseen varattuja vuoroja, vapaista sulkapallovuoroista voi tiedustella liikuntapaikanhoitajilta. Ulkona 8.00-21.00 jalkapallo, koripallo,lentopallo, tennis, yleisurheilu"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="170dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="403dp"
-        android:layout_height="72dp"
-        android:text="Kassa +358 44 700 88200 \nLiikunnanpaikanhoitajat +358 9 310 31641 \nTiimiesimies Jarkko Rantanen +358 9 310 87000 \nLiikunnanohjaaja +358 9 310 31641"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="264dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
