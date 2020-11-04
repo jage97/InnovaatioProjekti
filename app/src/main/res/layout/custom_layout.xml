@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/okmit"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
     <androidx.cardview.widget.CardView
         android:layout_width="409dp"
         android:layout_height="wrap_content"
@@ -110,16 +110,16 @@
                 android:layout_height="21dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="4dp"
+                android:maxLength="11"
                 android:text="Helsinki"
                 android:textSize="15dp"
-                android:maxLength="11"
                 app:layout_constraintBottom_toTopOf="@+id/view1"
                 app:layout_constraintEnd_toStartOf="@+id/icon1"
-                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                app:layout_constraintStart_toEndOf="@+id/mapicon"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/mapicon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="8dp"
@@ -130,7 +130,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/view1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title"
-                app:srcCompat="@drawable/ic_baseline_location_on_24" />
+                android:background="@drawable/ic_baseline_location_on_24"></ImageView>
 
             <TextView
                 android:id="@+id/status"

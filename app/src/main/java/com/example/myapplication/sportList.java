@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,7 +63,7 @@ public class sportList extends AppCompatActivity {
     private AlertDialog dialog, dialogInfo;
     private EditText user, password;
     private Button loginButton, exitButton, rekButton;
-
+    private static Context context;
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -77,10 +78,12 @@ public class sportList extends AppCompatActivity {
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sportlist);
-        dialogBuilderInfo = new AlertDialog.Builder(this);
+        Bundle extras = getIntent().getBundleExtra("bundl");
+
+        sportList.context = getApplicationContext();
+        dialogBuilderInfo = new AlertDialog.Builder(context);
         String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikko.xls?raw=true";
 
-        recyclerView = findViewById(R.id.listOfSport);
         //Excel fetch
         titles = new ArrayList<>();     //row 0
         addresses = new ArrayList<>();  //row 1
@@ -94,83 +97,51 @@ public class sportList extends AppCompatActivity {
 
 
         coordinates = new ArrayList<>();
-        client = new AsyncHttpClient();
+        // client = new AsyncHttpClient();
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        titles = extras.getStringArrayList("titles");
+        addresses = extras.getStringArrayList("addresses");
+        cities = extras.getStringArrayList("cities");
+        websites = extras.getStringArrayList("websites");
+        sports = extras.getStringArrayList("sports");
+        regi = extras.getStringArrayList("regi");
+        managers = extras.getStringArrayList("managers");
+        supervisor = extras.getStringArrayList("supervisor");
+        moreInfo = extras.getStringArrayList("moreinfo");
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        showData();
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
 
-        getLocation();
-        client.get(url, new FileAsyncHttpResponseHandler(this) {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File file) {
-                WorkbookSettings ws = new WorkbookSettings();
-                ws.setEncoding("windows-1252");
-                ws.setGCDisabled(true);
-                if(file != null){
-                    try {
-                        workbook = workbook.getWorkbook(file,ws);
-                        Sheet sheet = workbook.getSheet(0);
-                        for(int i = 1;i < sheet.getRows();i++){
-                            Cell[] row = sheet.getRow(i);
-                            for(int s= 0;s< row.length;s++){
-                                if(row[s].getType() == null){
-                                }
-                            }
-                            titles.add(row[0].getContents());
-                            addresses.add(row[1].getContents());
-                            cities.add(row[2].getContents());
-                            websites.add("Verkkosivut: "+row[3].getContents() + "\n");
-                            sports.add(row[4].getContents());
-                            regi.add("Kassa: "+row[5].getContents()+ "\n");
-                            managers.add("Liikuntapaikanhoitajat: " + row[6].getContents()+ "\n");
-                            supervisor.add("Tiimiesimies: " + row[7].getContents() + " " + row[8].getContents());
-                            moreInfo.add(row[9].getContents());
-                        }
-                        for(int i = 0;i <addresses.size();i++) {
-                            coordinates.add(getLocationFromAddress("Matinraitti 5 Espoo finland"));
-                        }
-                        showData();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (BiffException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+//            getLocation();
     }
+
+
     public void changeItem(int position) {
         String str1 = Integer.toString(position);
         Toast.makeText(this, str1, Toast.LENGTH_SHORT).show();
 
 
     }
-
-
     private void showData() {
-        adapter = new Adapter(this, titles, addresses, cities, sports, images, getLocation(),coordinates);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new Adapter(context, titles, addresses, cities, sports, images, "getLocation()");
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView = (RecyclerView) findViewById(R.id.listOfSport);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
 
         adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 changeItem(position);
-                Intent intent = new Intent(getApplicationContext(),recyclerClass.class);
+                Intent intent = new Intent(context,recyclerClass.class);
                 intent.putExtra("title", titles.get(position));
                 intent.putExtra("address", addresses.get(position) +" " +cities.get(position));
                 intent.putExtra("sport", sports.get(position));
                 intent.putExtra("numbers", regi.get(position) + managers.get(position) + supervisor.get(position));
                 intent.putExtra("moreInfo", websites.get(position)+moreInfo.get(position));
-
                 startActivity(intent);
             }
         });
@@ -214,21 +185,6 @@ public class sportList extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-  /*  public void createNewContactDialogInfo(int position){
-        dialogBuilderInfo = new AlertDialog.Builder(this);
-        View contactPopupViewInfo = getLayoutInflater().inflate(R.layout.popupinfo, null);
-        dialogBuilderInfo.setView(contactPopupViewInfo);
-
-
-
-        String temp = titles.get(position);
-        final  TextView  textTitle = (TextView)findViewById(R.id.textTitle);
-        //textTitle.setText("hrt");
-        //textTitle.setText(temp);
-        dialogInfo.setView(textTitle);
-        dialogInfo = dialogBuilderInfo.create();
-        dialogInfo.show();
-    }*/
 
     public void createNewContactDialogLogin(){
         dialogBuilderLogin = new AlertDialog.Builder(this);

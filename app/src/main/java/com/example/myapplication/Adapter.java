@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         location = text;
     }
 
-    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location, List<LatLng> coordinates) {
+    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location) {
         this.inflater = LayoutInflater.from(context);
         this.titles = titles;
         this.addresses = addresses;
@@ -82,17 +83,19 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String title = titles.get(position);
+        String title = "N/A";
+        String city = "N/A";
+        title = titles.get(position);
 
-        Log.d("TAG","60.251028 24.771102" + " + " + coordinates.get(position).latitude +" + "+ coordinates.get(position).longitude);
-        String city = distance(coordinates.get(position).latitude, coordinates.get(position).longitude,60.242233000000006,24.771102);
-        //String city = "fsfs";
-        holder.sportIcon1.setImageResource(images[0]);
-        holder.sportIcon2.setImageResource(images[1]);
-        holder.sportIcon3.setImageResource(images[2]);
-        holder.sportIcon4.setImageResource(images[3]);
-        holder.sportIcon5.setImageResource(images[4]);
-        holder.sportIcon6.setImageResource(images[5]);
+        //Log.d("TAG","60.251028 24.771102" + " + " + coordinates.get(position).latitude +" + "+ coordinates.get(position).longitude);
+        //String city = distance(coordinates.get(position).latitude, coordinates.get(position).longitude,60.242233000000006,24.771102);
+        city = cities.get(position);
+        //holder.sportIcon1.setImageResource(images[0]);
+        //holder.sportIcon2.setImageResource(images[1]);
+        //holder.sportIcon3.setImageResource(images[2]);
+        //holder.sportIcon4.setImageResource(images[3]);
+        //holder.sportIcon5.setImageResource(images[4]);
+        //holder.sportIcon6.setImageResource(images[5]);
         holder.title.setText(title);
         holder.city.setText(city);
     }
@@ -115,21 +118,18 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             sportIcon4 = itemView.findViewById(R.id.icon4);
             sportIcon5 = itemView.findViewById(R.id.icon5);
             sportIcon6 = itemView.findViewById(R.id.icon6);
-
             title = itemView.findViewById(R.id.title);
             city = itemView.findViewById(R.id.city);
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                    if(listener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            listener.onItemClick(position);
-
+                    @Override
+                    public void onClick(View v) {
+                        if(listener != null){
+                            int position = getAdapterPosition();
+                            if (position != RecyclerView.NO_POSITION){
+                                listener.onItemClick(position);
+                            }
                         }
-                    }
-                    title = v.findViewById(R.id.textTitle123);
                 }
             });
         }
