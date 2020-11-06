@@ -4,17 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/okmit"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+
+    >
+
     <androidx.cardview.widget.CardView
         android:layout_width="409dp"
         android:layout_height="wrap_content"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#fdfefe">
 
             <ImageView
                 android:id="@+id/icon3"
@@ -97,7 +103,8 @@
                 android:layout_marginRight="19dp"
                 android:maxLength="44"
                 android:text="Lauttasaaren liikuntapuisto / Tekojääkaukalo"
-                android:textSize="15sp"
+                android:textColor="#252a34"
+                android:textSize="15.5dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/status"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -108,11 +115,12 @@
                 android:id="@+id/city"
                 android:layout_width="81dp"
                 android:layout_height="21dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginBottom="4dp"
                 android:maxLength="11"
                 android:text="Helsinki"
-                android:textSize="15dp"
+                android:textColor="#252a34"
+                android:textSize="15.5dp"
                 app:layout_constraintBottom_toTopOf="@+id/view1"
                 app:layout_constraintEnd_toStartOf="@+id/icon1"
                 app:layout_constraintStart_toEndOf="@+id/mapicon"
@@ -126,19 +134,20 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="5dp"
+                android:background="@drawable/ic_baseline_location_on_24"
                 android:contentDescription="TODO"
                 app:layout_constraintBottom_toTopOf="@+id/view1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title"
-                android:background="@drawable/ic_baseline_location_on_24"></ImageView>
+                app:layout_constraintVertical_bias="1.0"></ImageView>
 
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginRight="32dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
                 android:text="CLOSED"
                 android:textColor="#CD0101"
                 android:textSize="15sp"
@@ -151,7 +160,7 @@
                 android:layout_height="2dp"
                 android:layout_below="@+id/textView2"
                 android:layout_alignParentRight="true"
-                android:background="#808080"
+                android:background="#252a34"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

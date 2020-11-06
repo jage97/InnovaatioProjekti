@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent">
 
     <TextView
@@ -14,6 +13,7 @@
         android:layout_marginLeft="9dp"
         android:autoLink="web"
         android:linksClickable="true"
+        android:textColor="#252a34"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -23,6 +23,7 @@
         android:layout_width="410dp"
         android:layout_height="wrap_content"
         android:gravity="center|top"
+        android:textColor="#252a34"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,6 +47,7 @@
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
         android:text="Phone numbers"
+        android:textColor="#252a34"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +61,7 @@
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
         android:text="More information"
+        android:textColor="#252a34"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,6 +73,7 @@
         android:layout_width="411dp"
         android:layout_height="23dp"
         android:gravity="center"
+        android:textColor="#252a34"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,6 +88,7 @@
         android:layout_marginLeft="9dp"
         android:layout_marginTop="18dp"
         android:text="Sports"
+        android:textColor="#252a34"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +101,7 @@
         android:layout_height="21dp"
         android:gravity="center"
         android:text="CLOSED"
+        android:textColor="#252a34"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,6 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
+        android:textColor="#252a34"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -117,6 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
+        android:textColor="#252a34"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
