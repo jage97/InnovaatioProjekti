@@ -39,7 +39,7 @@ import java.util.Locale;
 import static android.content.ContentValues.TAG;
 import static java.lang.Double.parseDouble;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements Filterable {
     LayoutInflater inflater;
     List<String> titles, addresses, cities;
     List<String> sports;
@@ -48,11 +48,46 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     LocationManager locationManager;
     int[] images;
     private OnItemClickListener mListener;
-
+    private List<String> titlesF;
 
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<String> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0){
+                filteredList.addAll(titlesF);
+
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (int i = 0; i < titles.size(); i++) {
+
+                    if (titles.get(i).toLowerCase().startsWith(filterPattern)){
+                        filteredList.add(titles.get(i));
+                    }
+                }
+
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            titles.clear();
+            titles.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public void setOnItemClickListener(OnItemClickListener listener){
         mListener = listener;
@@ -62,7 +97,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         location = text;
     }
 
-    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location) {
+    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location){
         this.inflater = LayoutInflater.from(context);
         this.titles = titles;
         this.addresses = addresses;
@@ -72,6 +107,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         this.coordinates = coordinates;
         this.location = location;
 
+        titlesF = new ArrayList<>(titles);
     }
 
     @NonNull

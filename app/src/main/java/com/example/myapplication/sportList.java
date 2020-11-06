@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,13 +42,22 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.widget.SearchView;
 import cz.msebera.android.httpclient.Header;
 import jxl.Cell;
 import jxl.Workbook;
 import jxl.Sheet;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.app.SearchManager;
+import android.widget.SearchView.OnQueryTextListener;
 
 import static android.content.ContentValues.TAG;
 
@@ -151,6 +161,21 @@ public class sportList extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_scrolling, menu);
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -218,6 +243,8 @@ public class sportList extends AppCompatActivity {
             }
         });
     }
+
+
     String getLocation() {
         String sLocation = "";
         LatLng coordinates = null;
@@ -273,6 +300,7 @@ public class sportList extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     public LatLng getLocationFromAddress(String strAddress){
 
         Geocoder coder = new Geocoder(this);

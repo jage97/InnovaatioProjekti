@@ -46,6 +46,7 @@
         android:id="@+id/search"
         android:icon="@drawable/ic_search"
         android:title="Haku"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.SearchView"/>
 
 </menu>
