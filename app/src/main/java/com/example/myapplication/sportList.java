@@ -318,7 +318,7 @@ public class sportList extends AppCompatActivity {
             Address location=address.get(0);
 
 
-            //Log.e(TAG,"JUMALAUTA :" + location.getLatitude() + " , "+ location.getLongitude());
+            //Log.e(TAG,"JUMALAUfTA :" + location.getLatitude() + " , "+ location.getLongitude());
             p1 = new LatLng((double) (location.getLatitude() ),
                     (double) (location.getLongitude()));
 
