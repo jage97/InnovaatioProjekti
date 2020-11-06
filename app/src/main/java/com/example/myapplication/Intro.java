@@ -44,85 +44,89 @@ public class Intro  extends AppCompatActivity {
     List<LatLng> coordinates;
     LocationManager locationManager;
     protected void onCreate(android.os.Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //db.collection("cities").doc("new-city-id").set(data);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions( (Activity) this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+            recreate();
+        } else {
+            super.onCreate(savedInstanceState);
+            //db.collection("cities").doc("new-city-id").set(data);
 
-        setTheme(R.style.AppTheme_NoActionBar);
-        setContentView(R.layout.activity_intro);
-        Intro.context = getApplicationContext();
-        client = new AsyncHttpClient();
-        titles = new ArrayList<>();     //row 0
-        addresses = new ArrayList<>();  //row 1
-        cities = new ArrayList<>();     //row 2
-        websites = new ArrayList<>();   //row 3
-        sports = new ArrayList<>();     //row 4
-        regi = new ArrayList<>();       //row 5
-        managers = new ArrayList<>();   //row 6
-        supervisor = new ArrayList<>(); //row 7 & 8
-        moreInfo = new ArrayList<>();   //row 9
+            setTheme(R.style.AppTheme_NoActionBar);
+            setContentView(R.layout.activity_intro);
+            Intro.context = getApplicationContext();
+            client = new AsyncHttpClient();
+            titles = new ArrayList<>();     //row 0
+            addresses = new ArrayList<>();  //row 1
+            cities = new ArrayList<>();     //row 2
+            websites = new ArrayList<>();   //row 3
+            sports = new ArrayList<>();     //row 4
+            regi = new ArrayList<>();       //row 5
+            managers = new ArrayList<>();   //row 6
+            supervisor = new ArrayList<>(); //row 7 & 8
+            moreInfo = new ArrayList<>();   //row 9
 
-        String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikkojooko.xls?raw=true";
+            String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikkojooko.xls?raw=true";
 
-        client.get(url, new FileAsyncHttpResponseHandler(context) {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, File
-                    file) {
-            }
+            client.get(url, new FileAsyncHttpResponseHandler(context) {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, File
+                        file) {
+                }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, File file) {
-                WorkbookSettings ws = new WorkbookSettings();
-                ws.setEncoding("windows-1252");
-                ws.setGCDisabled(true);
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, File file) {
+                    WorkbookSettings ws = new WorkbookSettings();
+                    ws.setEncoding("windows-1252");
+                    ws.setGCDisabled(true);
 
-                Bundle bun = new Bundle();
-                if (file != null) {
-                    try {
-                        workbook = workbook.getWorkbook(file, ws);
-                        //db.collection("sportList").document("sportList").set(workbook);
-                        Sheet sheet = workbook.getSheet(0);
+                    Bundle bun = new Bundle();
+                    if (file != null) {
+                        try {
+                            workbook = workbook.getWorkbook(file, ws);
+                            //db.collection("sportList").document("sportList").set(workbook);
+                            Sheet sheet = workbook.getSheet(0);
 
-                        for (int i = 1; i < sheet.getRows(); i++) {
-                            Cell[] row = sheet.getRow(i);
-                            for (int s = 0; s < row.length; s++) {
-                                if (row[s].getType() == null) {
+                            for (int i = 1; i < sheet.getRows(); i++) {
+                                Cell[] row = sheet.getRow(i);
+                                for (int s = 0; s < row.length; s++) {
+                                    if (row[s].getType() == null) {
+                                    }
                                 }
+                                titles.add(row[0].getContents());
+                                addresses.add(row[1].getContents());
+                                cities.add(row[2].getContents());
+                                websites.add("Verkkosivut: " + row[3].getContents() + "\n");
+                                sports.add(row[4].getContents());
+                                regi.add("Kassa: " + row[5].getContents() + "\n");
+                                managers.add("Liikuntapaikanhoitajat: " + row[6].getContents() + "\n");
+                                supervisor.add("Tiimiesimies: " + row[7].getContents() + " " + row[8].getContents());
+                                moreInfo.add(row[9].getContents());
                             }
-                            titles.add(row[0].getContents());
-                            addresses.add(row[1].getContents());
-                            cities.add(row[2].getContents());
-                            websites.add("Verkkosivut: " + row[3].getContents() + "\n");
-                            sports.add(row[4].getContents());
-                            regi.add("Kassa: " + row[5].getContents() + "\n");
-                            managers.add("Liikuntapaikanhoitajat: " + row[6].getContents() + "\n");
-                            supervisor.add("Tiimiesimies: " + row[7].getContents() + " " + row[8].getContents());
-                            moreInfo.add(row[9].getContents());
+                            bun.putStringArrayList("titles", titles);
+                            bun.putStringArrayList("addresses", addresses);
+                            bun.putStringArrayList("cities", cities);
+                            bun.putStringArrayList("websites", websites);
+                            bun.putStringArrayList("sports", sports);
+                            bun.putStringArrayList("regi", regi);
+                            bun.putStringArrayList("managers", managers);
+                            bun.putStringArrayList("supervisor", supervisor);
+                            bun.putStringArrayList("moreinfo", moreInfo);
+                            Intent intent = new Intent(context.getApplicationContext(), sportList.class);
+                            intent.putExtra("bundl", bun);
+                            startActivity(intent);
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (BiffException e) {
+                            e.printStackTrace();
                         }
-                        bun.putStringArrayList("titles", titles);
-                        bun.putStringArrayList("addresses", addresses);
-                        bun.putStringArrayList("cities", cities);
-                        bun.putStringArrayList("websites", websites);
-                        bun.putStringArrayList("sports", sports);
-                        bun.putStringArrayList("regi", regi);
-                        bun.putStringArrayList("managers", managers);
-                        bun.putStringArrayList("supervisor", supervisor);
-                        bun.putStringArrayList("moreinfo", moreInfo);
-                        Intent intent = new Intent(context.getApplicationContext(), sportList.class);
-                        intent.putExtra("bundl", bun);
-                        startActivity(intent);
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (BiffException e) {
-                        e.printStackTrace();
                     }
                 }
-            }
 
 
-        });
-
+            });
+        }
     }
     String getLocation() {
         String sLocation = "";
