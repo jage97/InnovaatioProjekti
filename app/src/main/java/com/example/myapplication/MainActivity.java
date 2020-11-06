@@ -16,28 +16,6 @@ public class MainActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
-            buttonA2 = (Button) findViewById(R.id.buttonA2);
-            buttonA2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openActivity2();
-                }
-            });
-            buttonPic = (Button) findViewById(R.id.buttonPic);
-            buttonPic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openActivityPic();
-                }
-            });
-
         }
-        public void openActivity2(){
-        Intent intent2 = new Intent(this, MainActivity2.class);
-        startActivity(intent2);
-    }
-    public void openActivityPic(){
-        Intent intent2 = new Intent(this, PicActivity.class);
-        startActivity(intent2);
-    }
+
 }
