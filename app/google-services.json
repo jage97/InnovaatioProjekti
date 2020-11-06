@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "767672043343",
+    "firebase_url": "https://innovationproject-da25c.firebaseio.com",
+    "project_id": "innovationproject-da25c",
+    "storage_bucket": "innovationproject-da25c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767672043343:android:076fd3db9b15c15aabe73a",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767672043343-ia43dh4ljtajjr4g3ioir36huarfd3j5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myapplication",
+            "certificate_hash": "a29fa6d5c0c02efa7844793ef88aaf797b4057da"
+          }
+        },
+        {
+          "client_id": "767672043343-bq7307g7s1nams78ctltfa7n6d9k3pip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHq76H-QYAdOq5Z--hMF5WQCuBEHukkg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767672043343-bq7307g7s1nams78ctltfa7n6d9k3pip.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
