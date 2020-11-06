@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import cz.msebera.android.httpclient.Header;
@@ -37,12 +38,15 @@ import static android.content.ContentValues.TAG;
 public class Intro  extends AppCompatActivity {
     AsyncHttpClient client;
     Workbook workbook;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static Context context;
     ArrayList<String> titles, addresses, cities, sports, websites, regi, managers, supervisor, moreInfo;
     List<LatLng> coordinates;
     LocationManager locationManager;
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //db.collection("cities").doc("new-city-id").set(data);
+
         setTheme(R.style.AppTheme_NoActionBar);
         setContentView(R.layout.activity_intro);
         Intro.context = getApplicationContext();
@@ -75,6 +79,7 @@ public class Intro  extends AppCompatActivity {
                 if (file != null) {
                     try {
                         workbook = workbook.getWorkbook(file, ws);
+                        //db.collection("sportList").document("sportList").set(workbook);
                         Sheet sheet = workbook.getSheet(0);
 
                         for (int i = 1; i < sheet.getRows(); i++) {
