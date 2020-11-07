@@ -12,6 +12,10 @@
 
 
     </style>
+    <style name="mitvit" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColorPrimary">@color/actionMenuTextColor</item>
+        <item name="android:textColorSecondary">@color/actionMenuTextColor</item>
+    </style>
     <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_baseline_more_vert_black_24dp</item>
     </style>

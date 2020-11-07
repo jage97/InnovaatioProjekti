@@ -163,7 +163,6 @@ public class sportList extends AppCompatActivity {
         inflater.inflate(R.menu.menu_scrolling, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) searchItem.getActionView();
-
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
