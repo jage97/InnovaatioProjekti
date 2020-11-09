@@ -38,6 +38,7 @@ import cz.msebera.android.httpclient.Header;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class Intro  extends AppCompatActivity {
     AsyncHttpClient client;
     Workbook workbook;
     private static Context context;
-    ArrayList<String> titles, addresses, cities, sports, websites, regi, managers, supervisor, moreInfo;
+    ArrayList<String> titles, addresses, cities, sports, websites, regi, managers, supervisor,superhumans, contacts, trainers, appointments, beachstaff, specialRegi, moreInfo;
     List<LatLng> coordinates;
     LocationManager locationManager;
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -74,11 +75,16 @@ public class Intro  extends AppCompatActivity {
             regi = new ArrayList<>();       //row 5
             managers = new ArrayList<>();   //row 6
             supervisor = new ArrayList<>(); //row 7 & 8
-            moreInfo = new ArrayList<>();   //row 9
+            superhumans = new ArrayList<>(); //row 9 & 10
+            contacts = new ArrayList<>(); //row 11 & 12
+            trainers = new ArrayList<>(); //row 13
+            appointments = new ArrayList<>(); //row 14
+            beachstaff = new ArrayList<>(); //row 15
+            specialRegi = new ArrayList<>(); //row 16
+            moreInfo = new ArrayList<>();   //row 17
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("liikuntapaikat");
-            String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikkojooko.xls?raw=true";
-            /*myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot data: dataSnapshot.getChildren()){
@@ -90,6 +96,12 @@ public class Intro  extends AppCompatActivity {
                         regi.add(data.child("regi").getValue().toString());
                         managers.add(data.child("manager").getValue().toString());
                         supervisor.add(data.child("supervisor").getValue().toString());
+                        superhumans.add(data.child("superhuman").getValue().toString());
+                        contacts.add(data.child("contact").getValue().toString());
+                        trainers.add(data.child("trainer").getValue().toString());
+                        appointments.add(data.child("appointment").getValue().toString());
+                        beachstaff.add(data.child("beachstaff").getValue().toString());
+                        specialRegi.add(data.child("specialregi").getValue().toString());
                         moreInfo.add(data.child("moreInfo").getValue().toString());
                     }
                     Bundle bun = new Bundle();
@@ -101,6 +113,12 @@ public class Intro  extends AppCompatActivity {
                     bun.putStringArrayList("regi", regi);
                     bun.putStringArrayList("managers", managers);
                     bun.putStringArrayList("supervisor", supervisor);
+                    bun.putStringArrayList("superhumans", superhumans);
+                    bun.putStringArrayList("contacts", contacts);
+                    bun.putStringArrayList("trainers", trainers);
+                    bun.putStringArrayList("appointments", appointments);
+                    bun.putStringArrayList("beachstaff", beachstaff);
+                    bun.putStringArrayList("specialRegi", specialRegi);
                     bun.putStringArrayList("moreinfo", moreInfo);
                     Intent intent = new Intent(context.getApplicationContext(), sportList.class);
                     intent.putExtra("bundl", bun);
@@ -110,9 +128,9 @@ public class Intro  extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {
                     // ...
                 }
-            });*/
+            });
 
-
+            /*String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikkojooko.xls?raw=true";
             client.get(url, new FileAsyncHttpResponseHandler(context) {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, File
@@ -167,7 +185,7 @@ public class Intro  extends AppCompatActivity {
                         }
                     }
                 }
-            });
+            });*/
         }
     }
     String getLocation() {

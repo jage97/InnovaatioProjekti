@@ -67,14 +67,14 @@ public class sportList extends AppCompatActivity {
     AsyncHttpClient client;
     Workbook workbook;
     //Excel
-    List<String> titles, addresses, cities, sports, websites, regi, managers, supervisor, moreInfo;
+    List<String> titles, addresses, cities, sports, websites, regi, managers, supervisor, superhumans, contacts, trainers, appointments, beachstaff, specialRegi, moreInfo;
     List<LatLng> coordinates;
     private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
     private AlertDialog dialog, dialogInfo;
     private EditText user, password;
     private Button loginButton, exitButton, rekButton;
     private static Context context;
-
+    String temp, temp2 = "";
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -92,7 +92,6 @@ public class sportList extends AppCompatActivity {
 
         sportList.context = getApplicationContext();
         dialogBuilderInfo = new AlertDialog.Builder(context);
-        String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikko.xls?raw=true";
 
         //Excel fetch
         titles = new ArrayList<>();     //row 0
@@ -103,7 +102,13 @@ public class sportList extends AppCompatActivity {
         regi = new ArrayList<>();       //row 5
         managers = new ArrayList<>();   //row 6
         supervisor = new ArrayList<>(); //row 7 & 8
-        moreInfo = new ArrayList<>();   //row 9
+        superhumans = new ArrayList<>(); //row 9 & 10
+        contacts = new ArrayList<>(); //row 11 & 12
+        trainers = new ArrayList<>(); //row 13
+        appointments = new ArrayList<>(); //row 14
+        beachstaff = new ArrayList<>(); //row 15
+        specialRegi = new ArrayList<>(); //row 16
+        moreInfo = new ArrayList<>();   //row 17
 
 
         coordinates = new ArrayList<>();
@@ -118,14 +123,22 @@ public class sportList extends AppCompatActivity {
         regi = extras.getStringArrayList("regi");
         managers = extras.getStringArrayList("managers");
         supervisor = extras.getStringArrayList("supervisor");
+        superhumans = extras.getStringArrayList("superhumans");
+        contacts = extras.getStringArrayList("contacts");
+        trainers = extras.getStringArrayList("trainers");
+        appointments = extras.getStringArrayList("appointments");
+        beachstaff = extras.getStringArrayList("beachstaff");
+        specialRegi = extras.getStringArrayList("specialRegi");
         moreInfo = extras.getStringArrayList("moreinfo");
+       // Log.e(TAG,titles.size()+" "+ addresses.size()+" "+websites.size()+" "+sports.size()+" "+regi.size()+" "+managers.size()+" "+supervisor.size()+" "+superhumans.size()+" "+contacts.size()+" "+trainers.size()+" "+appointments.size()+" "+beachstaff.size()+" "+specialRegi.size());
+
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         showData();
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
 
-//            getLocation();
+        //getLocation();
     }
 
 
@@ -150,8 +163,43 @@ public class sportList extends AppCompatActivity {
                 intent.putExtra("title", titles.get(position));
                 intent.putExtra("address", addresses.get(position) +" " +cities.get(position));
                 intent.putExtra("sport", sports.get(position));
-                intent.putExtra("numbers", regi.get(position) + managers.get(position) + supervisor.get(position));
-                intent.putExtra("moreInfo", websites.get(position)+moreInfo.get(position));
+                temp = "";
+                temp2 = "";
+                if(regi.get(position).length() > 1){
+                    temp = temp + regi.get(position) + "\n";
+                }
+                if(managers.get(position).length() > 1){
+                    temp = temp + managers.get(position) + "\n";
+                }
+                if(supervisor.get(position).length() > 1){
+                    temp = temp + supervisor.get(position) + "\n";
+                }
+                if(superhumans.get(position).length() > 1){
+                    temp = temp + superhumans.get(position) + "\n";
+                }
+                if(contacts.get(position).length() > 1){
+                    temp = temp + contacts.get(position) + "\n";
+                }
+                if(trainers.get(position).length() > 1){
+                    temp = temp + trainers.get(position) + "\n";
+                }
+                if(appointments.get(position).length() > 1){
+                    temp = temp + appointments.get(position) + "\n";
+                }
+                if(beachstaff.get(position).length() > 1){
+                    temp = temp + beachstaff.get(position) + "\n";
+                }
+                if(specialRegi.get(position).length() > 1){
+                    temp = temp + specialRegi.get(position) + "\n";
+                }
+                if(temp.length() > 1){
+                    temp = temp.substring(0, temp.length() - 1);;
+                }
+                if(websites.get(position).length() > 1){
+                    temp2 = websites.get(position) + "\n";
+                }
+                intent.putExtra("numbers", temp);
+                intent.putExtra("moreInfo", temp2+moreInfo.get(position));
                 startActivity(intent);
             }
         });
