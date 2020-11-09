@@ -233,13 +233,16 @@ public class sportList extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sisaankirjautuminen tahan
+                //LogIn
             }
         });
         rekButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //rekisterointi tahan
+                //Register
+                dialog.dismiss();
+                Intent intentRegister = new Intent(sportList.this, RegisterActivity.class);
+                startActivity(intentRegister);
             }
         });
     }
