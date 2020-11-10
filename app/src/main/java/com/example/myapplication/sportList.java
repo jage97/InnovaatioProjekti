@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
@@ -58,7 +61,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.SearchManager;
 import android.widget.SearchView.OnQueryTextListener;
-
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import static android.content.ContentValues.TAG;
 
 public class sportList extends AppCompatActivity {
@@ -71,9 +78,11 @@ public class sportList extends AppCompatActivity {
     List<LatLng> coordinates;
     private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
     private AlertDialog dialog, dialogInfo;
-    private EditText user, password;
+    private EditText user, passwordText;
     private Button loginButton, exitButton, rekButton;
     private static Context context;
+    FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -89,7 +98,7 @@ public class sportList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sportlist);
         Bundle extras = getIntent().getBundleExtra("bundl");
-
+        mAuth = FirebaseAuth.getInstance();
         sportList.context = getApplicationContext();
         dialogBuilderInfo = new AlertDialog.Builder(context);
         String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikko.xls?raw=true";
@@ -183,27 +192,20 @@ public class sportList extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.user:
-                Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
-                createNewContactDialogLogin();
                 return true;
-            case R.id.filter:
-                Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
+            case R.id.logIn:
+                createNewContactDialogLogin();
                 return true;
             case R.id.map:
                 Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.filter1:
-                Toast.makeText(this, "rajaa 1 painettu", Toast.LENGTH_SHORT).show();
+            case R.id.profile:
+                Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.filter2:
-                Toast.makeText(this, "rajaa 2 painettu", Toast.LENGTH_SHORT).show();
+            case R.id.logOut:
+                logOut();
                 return true;
-            case R.id.filter3:
-                Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
-                return true;
-
             case R.id.search:
-                Toast.makeText(this, "Haku", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
@@ -215,7 +217,7 @@ public class sportList extends AppCompatActivity {
         dialogBuilderLogin = new AlertDialog.Builder(this);
         final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
         user = (EditText) contactPopupView.findViewById(R.id.user);
-        password = (EditText) contactPopupView.findViewById(R.id.password);
+        passwordText = (EditText) contactPopupView.findViewById(R.id.password);
         loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
         exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
         rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
@@ -234,6 +236,21 @@ public class sportList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //LogIn
+                String email = user.getText().toString().trim();
+                String password = passwordText.getText().toString().trim();
+                if(TextUtils.isEmpty(email)){
+                    user.setError("Anna sahkoposti");
+                    return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    passwordText.setError("Anna salasana");
+                    return;
+                }
+                if (mAuth.getCurrentUser() == null) {
+                    logIn(email, password);
+                }else{
+                    Toast.makeText(sportList.this, "Already logged in", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         rekButton.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +263,43 @@ public class sportList extends AppCompatActivity {
             }
         });
     }
+    public void logOut(){
+        if (mAuth.getCurrentUser() != null) {
+            mAuth.signOut();
+            Toast.makeText(sportList.this, "Sign-out successful", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(sportList.this, "Not logged in", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+
+    public void logIn(String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password) .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            dialog.dismiss();
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(sportList.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                           // updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    public void updateUI(FirebaseUser user){
+        String s = user.getEmail()+" Logged in";
+        Toast.makeText(sportList.this, s, Toast.LENGTH_SHORT).show();
+
+    }
 
     String getLocation() {
         String sLocation = "";

@@ -32,7 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private static final String USER = "user";
     private String TAG = "RegisterActivity";
-    private User user;
+   // private User user;
+    private com.example.myapplication.User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +65,9 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = usernameText.getText().toString();
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(username)){
                     Toast.makeText(RegisterActivity.this, "Anna käyttäjänimi, sähköposti ja salasana", Toast.LENGTH_LONG).show();
+                    return;
+                }else if (password.length() < 6){
+                    Toast.makeText(RegisterActivity.this, "Salasanan pituus vähintään 6 kirjainta", Toast.LENGTH_LONG).show();
                     return;
                 }
                 com.example.myapplication.User user = new com.example.myapplication.User(email, username, password);
