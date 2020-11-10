@@ -11,6 +11,6 @@
         android:layout_height="240dp"
         android:layout_gravity="center"
         android:contentDescription="logo"
-        app:srcCompat="@mipmap/applogonew" />
+        app:srcCompat="@drawable/applogobig" />
 
 </FrameLayout>

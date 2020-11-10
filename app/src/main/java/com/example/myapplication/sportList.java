@@ -12,7 +12,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,8 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
@@ -61,11 +58,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.SearchManager;
 import android.widget.SearchView.OnQueryTextListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+
 import static android.content.ContentValues.TAG;
 
 public class sportList extends AppCompatActivity {
@@ -74,16 +67,14 @@ public class sportList extends AppCompatActivity {
     AsyncHttpClient client;
     Workbook workbook;
     //Excel
-    List<String> titles, addresses, cities, sports, websites, regi, managers, supervisor, moreInfo;
+    List<String> titles, addresses, cities, sports, websites, regi, managers, supervisor, superhumans, contacts, trainers, appointments, beachstaff, specialRegi, moreInfo;
     List<LatLng> coordinates;
     private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
     private AlertDialog dialog, dialogInfo;
-    private EditText user, passwordText;
+    private EditText user, password;
     private Button loginButton, exitButton, rekButton;
     private static Context context;
-    FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-
+    String temp, temp2 = "";
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -98,10 +89,9 @@ public class sportList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sportlist);
         Bundle extras = getIntent().getBundleExtra("bundl");
-        mAuth = FirebaseAuth.getInstance();
+
         sportList.context = getApplicationContext();
         dialogBuilderInfo = new AlertDialog.Builder(context);
-        String url = "https://github.com/jage97/InnovaatioProjekti/blob/master/toimikko.xls?raw=true";
 
         //Excel fetch
         titles = new ArrayList<>();     //row 0
@@ -112,7 +102,13 @@ public class sportList extends AppCompatActivity {
         regi = new ArrayList<>();       //row 5
         managers = new ArrayList<>();   //row 6
         supervisor = new ArrayList<>(); //row 7 & 8
-        moreInfo = new ArrayList<>();   //row 9
+        superhumans = new ArrayList<>(); //row 9 & 10
+        contacts = new ArrayList<>(); //row 11 & 12
+        trainers = new ArrayList<>(); //row 13
+        appointments = new ArrayList<>(); //row 14
+        beachstaff = new ArrayList<>(); //row 15
+        specialRegi = new ArrayList<>(); //row 16
+        moreInfo = new ArrayList<>();   //row 17
 
 
         coordinates = new ArrayList<>();
@@ -127,14 +123,22 @@ public class sportList extends AppCompatActivity {
         regi = extras.getStringArrayList("regi");
         managers = extras.getStringArrayList("managers");
         supervisor = extras.getStringArrayList("supervisor");
+        superhumans = extras.getStringArrayList("superhumans");
+        contacts = extras.getStringArrayList("contacts");
+        trainers = extras.getStringArrayList("trainers");
+        appointments = extras.getStringArrayList("appointments");
+        beachstaff = extras.getStringArrayList("beachstaff");
+        specialRegi = extras.getStringArrayList("specialRegi");
         moreInfo = extras.getStringArrayList("moreinfo");
+       // Log.e(TAG,titles.size()+" "+ addresses.size()+" "+websites.size()+" "+sports.size()+" "+regi.size()+" "+managers.size()+" "+supervisor.size()+" "+superhumans.size()+" "+contacts.size()+" "+trainers.size()+" "+appointments.size()+" "+beachstaff.size()+" "+specialRegi.size());
+
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         showData();
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
 
-//            getLocation();
+        //getLocation();
     }
 
 
@@ -159,8 +163,43 @@ public class sportList extends AppCompatActivity {
                 intent.putExtra("title", titles.get(position));
                 intent.putExtra("address", addresses.get(position) +" " +cities.get(position));
                 intent.putExtra("sport", sports.get(position));
-                intent.putExtra("numbers", regi.get(position) + managers.get(position) + supervisor.get(position));
-                intent.putExtra("moreInfo", websites.get(position)+moreInfo.get(position));
+                temp = "";
+                temp2 = "";
+                if(regi.get(position).length() > 1){
+                    temp = temp + regi.get(position) + "\n";
+                }
+                if(managers.get(position).length() > 1){
+                    temp = temp + managers.get(position) + "\n";
+                }
+                if(supervisor.get(position).length() > 1){
+                    temp = temp + supervisor.get(position) + "\n";
+                }
+                if(superhumans.get(position).length() > 1){
+                    temp = temp + superhumans.get(position) + "\n";
+                }
+                if(contacts.get(position).length() > 1){
+                    temp = temp + contacts.get(position) + "\n";
+                }
+                if(trainers.get(position).length() > 1){
+                    temp = temp + trainers.get(position) + "\n";
+                }
+                if(appointments.get(position).length() > 1){
+                    temp = temp + appointments.get(position) + "\n";
+                }
+                if(beachstaff.get(position).length() > 1){
+                    temp = temp + beachstaff.get(position) + "\n";
+                }
+                if(specialRegi.get(position).length() > 1){
+                    temp = temp + specialRegi.get(position) + "\n";
+                }
+                if(temp.length() > 1){
+                    temp = temp.substring(0, temp.length() - 1);;
+                }
+                if(websites.get(position).length() > 1){
+                    temp2 = websites.get(position) + "\n";
+                }
+                intent.putExtra("numbers", temp);
+                intent.putExtra("moreInfo", temp2+moreInfo.get(position));
                 startActivity(intent);
             }
         });
@@ -172,7 +211,6 @@ public class sportList extends AppCompatActivity {
         inflater.inflate(R.menu.menu_scrolling, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) searchItem.getActionView();
-
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -192,20 +230,27 @@ public class sportList extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.user:
-                return true;
-            case R.id.logIn:
+                Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
                 createNewContactDialogLogin();
+                return true;
+            case R.id.filter:
+                Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.map:
                 Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.profile:
-                Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
+            case R.id.filter1:
+                Toast.makeText(this, "rajaa 1 painettu", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.logOut:
-                logOut();
+            case R.id.filter2:
+                Toast.makeText(this, "rajaa 2 painettu", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.filter3:
+                Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+
             case R.id.search:
+                Toast.makeText(this, "Haku", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
@@ -217,7 +262,7 @@ public class sportList extends AppCompatActivity {
         dialogBuilderLogin = new AlertDialog.Builder(this);
         final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
         user = (EditText) contactPopupView.findViewById(R.id.user);
-        passwordText = (EditText) contactPopupView.findViewById(R.id.password);
+        password = (EditText) contactPopupView.findViewById(R.id.password);
         loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
         exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
         rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
@@ -235,71 +280,17 @@ public class sportList extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //LogIn
-                String email = user.getText().toString().trim();
-                String password = passwordText.getText().toString().trim();
-                if(TextUtils.isEmpty(email)){
-                    user.setError("Anna sahkoposti");
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    passwordText.setError("Anna salasana");
-                    return;
-                }
-                if (mAuth.getCurrentUser() == null) {
-                    logIn(email, password);
-                }else{
-                    Toast.makeText(sportList.this, "Already logged in", Toast.LENGTH_SHORT).show();
-                }
+                //sisaankirjautuminen tahan
             }
         });
         rekButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Register
-                dialog.dismiss();
-                Intent intentRegister = new Intent(sportList.this, RegisterActivity.class);
-                startActivity(intentRegister);
+                //rekisterointi tahan
             }
         });
     }
-    public void logOut(){
-        if (mAuth.getCurrentUser() != null) {
-            mAuth.signOut();
-            Toast.makeText(sportList.this, "Sign-out successful", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(sportList.this, "Not logged in", Toast.LENGTH_SHORT).show();
-        }
-    }
 
-
-    public void logIn(String email, String password){
-        mAuth.signInWithEmailAndPassword(email, password) .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            dialog.dismiss();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(sportList.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                           // updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-    }
-
-    public void updateUI(FirebaseUser user){
-        String s = user.getEmail()+" Logged in";
-        Toast.makeText(sportList.this, s, Toast.LENGTH_SHORT).show();
-
-    }
 
     String getLocation() {
         String sLocation = "";
@@ -374,7 +365,7 @@ public class sportList extends AppCompatActivity {
             Address location=address.get(0);
 
 
-            //Log.e(TAG,"JUMALAUTA :" + location.getLatitude() + " , "+ location.getLongitude());
+            //Log.e(TAG,"JUMALAUfTA :" + location.getLatitude() + " , "+ location.getLongitude());
             p1 = new LatLng((double) (location.getLatitude() ),
                     (double) (location.getLongitude()));
 
