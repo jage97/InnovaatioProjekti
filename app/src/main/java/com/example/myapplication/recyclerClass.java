@@ -107,8 +107,10 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap map) {
         LatLng locati = getLocationFromAddress(address);
-        map.addMarker(new MarkerOptions().position(locati));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(locati,12.0f));
+        if (locati != null) {
+            map.addMarker(new MarkerOptions().position(locati));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(locati,12.0f));
+        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
