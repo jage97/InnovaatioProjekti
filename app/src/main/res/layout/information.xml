@@ -2,12 +2,34 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:srcCompat="@drawable/gray" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:srcCompat="@drawable/gray" />
 
     <TextView
         android:id="@+id/textView11"
-        android:layout_width="402dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
@@ -20,7 +42,7 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="410dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center|top"
         android:textColor="#252a34"
@@ -43,7 +65,7 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="404dp"
+        android:layout_width="0dp"
         android:layout_height="24dp"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
@@ -57,7 +79,7 @@
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="405dp"
+        android:layout_width="0dp"
         android:layout_height="27dp"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
@@ -71,7 +93,7 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="23dp"
         android:gravity="center"
         android:textColor="#252a34"
@@ -83,7 +105,7 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="400dp"
+        android:layout_width="0dp"
         android:layout_height="26dp"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
@@ -98,19 +120,21 @@
 
     <TextView
         android:id="@+id/AVOINNA"
-        android:layout_width="410dp"
-        android:layout_height="21dp"
-        android:gravity="center"
+        android:layout_width="189dp"
+        android:layout_height="23dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:gravity="right"
         android:text="Kunto:"
         android:textColor="#252a34"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="400dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginLeft="9dp"
@@ -121,14 +145,47 @@
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="403dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
-        android:autoLink="phone"
         android:layout_marginLeft="9dp"
+        android:autoLink="phone"
         android:textColor="#252a34"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:srcCompat="@drawable/gray" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="107dp"
+        android:layout_marginRight="107dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:srcCompat="@drawable/gray" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:srcCompat="@drawable/gray" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

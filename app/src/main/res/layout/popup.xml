@@ -16,7 +16,7 @@
         android:layout_marginEnd="55dp"
         android:layout_marginRight="55dp"
         android:layout_marginBottom="10dp"
-        android:hint="Sähköposti"
+        android:hint="Käyttäjätunnus"
         android:singleLine="false"
         android:textSize="24sp"
         android:textStyle="italic"

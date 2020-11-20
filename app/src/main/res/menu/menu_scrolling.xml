@@ -6,28 +6,32 @@
 
 
 
-
-
     <item
         android:id="@+id/user"
         android:orderInCategory="100"
         android:title="Käyttäjä"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/filter"
+        android:orderInCategory="100"
+        android:title="Rajaus"
         app:showAsAction="never">
         <menu>
            <item
-               android:id="@+id/logIn"
+               android:id="@+id/filter1"
                android:orderInCategory="100"
-               android:title="kirjaudu sisään"
+               android:title="Rajaus1"
                app:showAsAction="never"/>
             <item
-                android:id="@+id/logOut"
+                android:id="@+id/filter2"
                 android:orderInCategory="100"
-                android:title="kirjaudu ulos"
+                android:title="Rajaus2"
                 app:showAsAction="never"/>
             <item
-                android:id="@+id/profile"
+                android:id="@+id/filter3"
                 android:orderInCategory="100"
-                android:title="profiili"
+                android:title="Rajaus3"
                 app:showAsAction="never"/>
         </menu>
     </item>

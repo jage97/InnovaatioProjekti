@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -10,10 +12,20 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,28 +34,60 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.HttpGet;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+
+import static java.lang.Double.parseDouble;
 
 public class recyclerClass extends AppCompatActivity implements OnMapReadyCallback {
     private MapView mMapView;
     String address;
+    Geocoder coder;
+    Adapter adapter;
+    private AlertDialog dialog, dialogInfo;
+    private EditText user, password;
+    private Button loginButton, exitButton, rekButton;
+    private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information);
+
         TextView textTitle = findViewById(R.id.textView);
         TextView textAddress = findViewById(R.id.textView4);
         TextView textSport = findViewById(R.id.textView8);
         TextView textNumbers = findViewById(R.id.textView10);
         TextView textMoreInfo = findViewById(R.id.textView11);
+        ImageView icon1 = findViewById(R.id.imageView1);
+        ImageView icon2 = findViewById(R.id.imageView2);
+        ImageView icon3 = findViewById(R.id.imageView3);
+        ImageView icon4 = findViewById(R.id.imageView4);
+        ImageView icon5 = findViewById(R.id.imageView5);
         Bundle mapViewBundle = null;
-
+        coder = new Geocoder(this);
         String title = "N/A";
         address = "N/A";
         String sport = "N/A";
         String numbers = "N/A";
         String moreInfo = "N/A";
+        Double rating = 0.0;
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             title = extras.getString("title");
@@ -51,7 +95,31 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
             sport = extras.getString("sport");
             numbers = extras.getString("numbers");
             moreInfo = extras.getString("moreInfo");
+            try {
+            rating = parseDouble(extras.getString("rating"));
+            } catch (NumberFormatException e){
+
+            };
         }
+        double p = rating;
+        ArrayList<ImageView> icons = new ArrayList<>();
+        icons.add(icon1);
+        icons.add(icon2);
+        icons.add(icon3);
+        icons.add(icon4);
+        icons.add(icon5);
+        for (ImageView icon : icons) {
+            if (p > 1) {
+                icon.setImageResource(R.drawable.full);
+                p = p - 2;
+            } else if (p == 1) {
+                icon.setImageResource(R.drawable.half);
+                p = p - 1;
+            } else {
+                icon.setImageResource(R.drawable.gray);
+            }
+        }
+      //  };
         textTitle.setText(title);
         textAddress.setText(address);
         textSport.setText(sport);
@@ -60,7 +128,7 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
 
         mMapView = (MapView) findViewById(R.id.mapView);
         if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle("maps_api_key");
+            mapViewBundle = savedInstanceState.getBundle("MAPS_API_KEY");
         }
 
         mMapView.onCreate(mapViewBundle);
@@ -74,13 +142,80 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
 
     }
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_rating, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.user:
+                Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
+                createNewContactDialogLogin();
+                return true;
+            case R.id.filter:
+                Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.map:
+                Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.filter1:
+                Toast.makeText(this, "rajaa 1 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.filter2:
+                Toast.makeText(this, "rajaa 2 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.filter3:
+                Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void createNewContactDialogLogin(){
+        dialogBuilderLogin = new AlertDialog.Builder(this);
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
+        user = (EditText) contactPopupView.findViewById(R.id.user);
+        password = (EditText) contactPopupView.findViewById(R.id.password);
+        loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
+        exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
+        rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
+
+        dialogBuilderLogin.setView(contactPopupView);
+        dialog = dialogBuilderLogin.create();
+        dialog.show();
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sisaankirjautuminen tahan
+            }
+        });
+        rekButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //rekisterointi tahan
+            }
+        });
+    }
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        Bundle mapViewBundle = outState.getBundle("maps_api_key");
+        Bundle mapViewBundle = outState.getBundle("MAPS_API_KEY");
         if (mapViewBundle == null) {
             mapViewBundle = new Bundle();
-            outState.putBundle("maps_api_key", mapViewBundle);
+            outState.putBundle("MAPS_API_KEY", mapViewBundle);
         }
 
         mMapView.onSaveInstanceState(mapViewBundle);
@@ -106,11 +241,24 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng locati = getLocationFromAddress(address);
+        LatLng locati = null;
+        /*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        MyGeocoder codery = new MyGeocoder();
+        List<Address> loca = codery.getFromLocationName(address + " Finland", 2);
+        if(loca.size() > 1) {
+            locati = new LatLng((double) (loca.get(0).getLatitude()),
+                    (double) (loca.get(0).getLongitude()));
+            Log.e("TAG", loca + "thisIsShit");
+        }
         if (locati != null) {
             map.addMarker(new MarkerOptions().position(locati));
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(locati,12.0f));
-        }
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(locati, 12.0f));
+        }*/
+        locati = new LatLng((double) (0),
+                (double) (0));
+        map.addMarker(new MarkerOptions().position(locati));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(locati, 12.0f));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -146,13 +294,13 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
     }
     public LatLng getLocationFromAddress(String strAddress){
 
-        Geocoder coder = new Geocoder(this);
         List<Address> address;
         LatLng p1 = null;
+        Log.e("TAG",strAddress);
 
         try {
 
-            address = coder.getFromLocationName(strAddress,5);
+            address = coder.getFromLocationName(strAddress,1);
 
             if (address==null) {
 
@@ -161,7 +309,7 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
             Address location=address.get(0);
 
 
-            //Log.e(TAG,"JUMALAUfTA :" + location.getLatitude() + " , "+ location.getLongitude());
+            //Log.e("TAG","JUMALAUTA :" + location.getLatitude() + " , "+ location.getLongitude());
             p1 = new LatLng((double) (location.getLatitude() ),
                     (double) (location.getLongitude()));
 
@@ -171,4 +319,5 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
         }
         return p1;
     }
+
 }

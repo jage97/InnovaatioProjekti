@@ -54,7 +54,7 @@ public class Intro  extends AppCompatActivity {
     AsyncHttpClient client;
     Workbook workbook;
     private static Context context;
-    ArrayList<String> titles, addresses, cities, sports, websites, regi, managers, supervisor,superhumans, contacts, trainers, appointments, beachstaff, specialRegi, moreInfo;
+    ArrayList<String> titles, addresses, cities, sports, websites, regi, managers, supervisor,superhumans, contacts, trainers, appointments, beachstaff, specialRegi, moreInfo, rating;
     List<LatLng> coordinates;
     LocationManager locationManager;
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -82,6 +82,7 @@ public class Intro  extends AppCompatActivity {
             beachstaff = new ArrayList<>(); //row 15
             specialRegi = new ArrayList<>(); //row 16
             moreInfo = new ArrayList<>();   //row 17
+            rating = new ArrayList<>();   //row 17
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("liikuntapaikat");
             myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -103,6 +104,7 @@ public class Intro  extends AppCompatActivity {
                         beachstaff.add(data.child("beachstaff").getValue().toString());
                         specialRegi.add(data.child("specialregi").getValue().toString());
                         moreInfo.add(data.child("moreInfo").getValue().toString());
+                        rating.add(data.child("rating").getValue().toString());
                     }
                     Bundle bun = new Bundle();
                     bun.putStringArrayList("titles", titles);
@@ -120,6 +122,7 @@ public class Intro  extends AppCompatActivity {
                     bun.putStringArrayList("beachstaff", beachstaff);
                     bun.putStringArrayList("specialRegi", specialRegi);
                     bun.putStringArrayList("moreinfo", moreInfo);
+                    bun.putStringArrayList("rating", rating);
                     Intent intent = new Intent(context.getApplicationContext(), sportList.class);
                     intent.putExtra("bundl", bun);
                     startActivity(intent);

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -41,7 +42,7 @@ import static java.lang.Double.parseDouble;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements Filterable {
     LayoutInflater inflater;
-    List<String> titles, addresses, cities;
+    List<String> titles, addresses, cities, rating;
     List<String> sports;
     List<LatLng> coordinates;
     String location;
@@ -97,7 +98,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
         location = text;
     }
 
-    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, String location){
+    public Adapter(Context context, List<String> titles, List<String> addresses, List<String> cities, List<String> sports, int[] images, List<String> rating, String location){
         this.inflater = LayoutInflater.from(context);
         this.titles = titles;
         this.addresses = addresses;
@@ -105,6 +106,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
         this.sports = sports;
         this.images = images;
         this.coordinates = coordinates;
+        this.rating = rating;
         this.location = location;
 
         titlesF = new ArrayList<>(titles);
@@ -134,6 +136,18 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
         //holder.sportIcon6.setImageResource(images[5]);
         holder.title.setText(title);
         holder.city.setText(city);
+        try {
+            if (parseDouble(rating.get(position)) >= 7) {
+                holder.ratingcolor.setBackgroundColor(Color.parseColor("#306722"));
+            } else if(parseDouble(rating.get(position)) > 4){
+                holder.ratingcolor.setBackgroundColor(Color.parseColor("#ffa600"));
+            } else {
+                holder.ratingcolor.setBackgroundColor(Color.parseColor("#e60404"));
+            };
+
+        } catch (NumberFormatException e){
+
+        };
     }
 
 
@@ -145,6 +159,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, city;
         ImageView sportIcon1, sportIcon2, sportIcon3, sportIcon4, sportIcon5, sportIcon6;
+        View ratingcolor;
 
         public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -154,6 +169,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
             sportIcon4 = itemView.findViewById(R.id.icon4);
             sportIcon5 = itemView.findViewById(R.id.icon5);
             sportIcon6 = itemView.findViewById(R.id.icon6);
+            ratingcolor = itemView.findViewById(R.id.ratingcolor);
             title = itemView.findViewById(R.id.title);
             city = itemView.findViewById(R.id.city);
 

@@ -1,0 +1,22 @@
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.myapplication.ScrollingActivity">
+
+
+
+    <item
+        android:id="@+id/user"
+        android:orderInCategory="100"
+        android:title="Käyttäjä"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/rating"
+        android:orderInCategory="100"
+        android:title="Arvostele"
+        app:showAsAction="never" />
+
+
+</menu>
