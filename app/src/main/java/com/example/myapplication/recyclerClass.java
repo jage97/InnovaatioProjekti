@@ -41,6 +41,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.HttpGet;
 
 import org.json.JSONArray;
@@ -67,11 +69,12 @@ import static java.lang.Double.parseDouble;
 public class recyclerClass extends AppCompatActivity implements OnMapReadyCallback {
     private MapView mMapView;
     String address;
+    String idchild;
     Geocoder coder;
     Adapter adapter;
     private AlertDialog dialog, dialogInfo;
-    private EditText user, passwordText;
-    private Button loginButton, exitButton, rekButton;
+    private EditText user, passwordText, rate;
+    private Button loginButton, exitButton, rekButton, rateButton;
     private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
     FirebaseAuth mAuth;
 
@@ -97,6 +100,7 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
         String sport = "N/A";
         String numbers = "N/A";
         String moreInfo = "N/A";
+        idchild = "0";
         Double rating = 0.0;
         Bundle extras = getIntent().getExtras();
         if (extras != null){
@@ -105,6 +109,7 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
             sport = extras.getString("sport");
             numbers = extras.getString("numbers");
             moreInfo = extras.getString("moreInfo");
+            idchild = extras.getString("idchild");
             try {
             rating = parseDouble(extras.getString("rating"));
             } catch (NumberFormatException e){
@@ -173,6 +178,9 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
             case R.id.logOut:
                 logOut();
                 return true;
+            case R.id.rating:
+                createNewContactDialogRate();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -228,6 +236,50 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
             }
         });
     }
+    public void createNewContactDialogRate(){
+        dialogBuilderLogin = new AlertDialog.Builder(this);
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.activity_rate, null);
+        rate = (EditText) contactPopupView.findViewById(R.id.ratetext);
+        rateButton = (Button) contactPopupView.findViewById(R.id.rateButton);
+        exitButton = (Button) contactPopupView.findViewById(R.id.backButton);
+
+        dialogBuilderLogin.setView(contactPopupView);
+        dialog = dialogBuilderLogin.create();
+        dialog.show();
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        rateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //LogIn
+                String rateString = rate.getText().toString().trim();
+                if (mAuth.getCurrentUser() == null) {
+                    Toast.makeText(recyclerClass.this, "not logged in", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                } else {
+                    try {
+                        if (TextUtils.isEmpty(rateString) || parseDouble(rateString) > 10 || parseDouble(rateString) < 0) {
+                            rate.setError("Anna luku 0-10");
+                            return;
+                        } else {
+                            Toast.makeText(recyclerClass.this, "Updated database", Toast.LENGTH_SHORT).show();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference myRef = database.getReference("liikuntapaikat");
+                            myRef.child(idchild).child("rating").setValue(rateString);
+                            dialog.dismiss();
+                        }
+                    } catch (NumberFormatException e) {
+                        return;
+                    }
+                }
+            }
+        });
+    }
     public void logOut(){
         if (mAuth.getCurrentUser() != null) {
             mAuth.signOut();
@@ -256,6 +308,9 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
                 // ...
             }
         });
+    }
+    public void rate(String rateString){
+        dialog.dismiss();
     }
     public void updateUI(FirebaseUser user){
         String s = user.getEmail()+" Logged in";
