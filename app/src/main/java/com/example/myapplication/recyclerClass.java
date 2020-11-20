@@ -8,11 +8,13 @@ import androidx.appcompat.view.menu.MenuView;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +36,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.HttpGet;
 
 import org.json.JSONArray;
@@ -54,6 +61,7 @@ import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
+import static android.content.ContentValues.TAG;
 import static java.lang.Double.parseDouble;
 
 public class recyclerClass extends AppCompatActivity implements OnMapReadyCallback {
@@ -62,13 +70,15 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
     Geocoder coder;
     Adapter adapter;
     private AlertDialog dialog, dialogInfo;
-    private EditText user, password;
+    private EditText user, passwordText;
     private Button loginButton, exitButton, rekButton;
     private AlertDialog.Builder dialogBuilderLogin, dialogBuilderInfo;
+    FirebaseAuth mAuth;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information);
+        mAuth = FirebaseAuth.getInstance();
 
         TextView textTitle = findViewById(R.id.textView);
         TextView textAddress = findViewById(R.id.textView4);
@@ -141,6 +151,7 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
 
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -152,25 +163,16 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.user:
-                Toast.makeText(this, "kayttaja painettu", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.logIn:
                 createNewContactDialogLogin();
                 return true;
-            case R.id.filter:
-                Toast.makeText(this, "rajaa painettu", Toast.LENGTH_SHORT).show();
+            case R.id.profile:
+                Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.map:
-                Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
+            case R.id.logOut:
+                logOut();
                 return true;
-            case R.id.filter1:
-                Toast.makeText(this, "rajaa 1 painettu", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.filter2:
-                Toast.makeText(this, "rajaa 2 painettu", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.filter3:
-                Toast.makeText(this, "rajaa 3 painettu", Toast.LENGTH_SHORT).show();
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -180,7 +182,7 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
         dialogBuilderLogin = new AlertDialog.Builder(this);
         final View contactPopupView = getLayoutInflater().inflate(R.layout.popup, null);
         user = (EditText) contactPopupView.findViewById(R.id.user);
-        password = (EditText) contactPopupView.findViewById(R.id.password);
+        passwordText = (EditText) contactPopupView.findViewById(R.id.password);
         loginButton = (Button) contactPopupView.findViewById(R.id.loginButton);
         exitButton = (Button) contactPopupView.findViewById(R.id.exitButton);
         rekButton = (Button) contactPopupView.findViewById(R.id.rekButton);
@@ -198,15 +200,66 @@ public class recyclerClass extends AppCompatActivity implements OnMapReadyCallba
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sisaankirjautuminen tahan
+                //LogIn
+                String email = user.getText().toString().trim();
+                String password = passwordText.getText().toString().trim();
+                if(TextUtils.isEmpty(email)){
+                    user.setError("Anna sahkoposti");
+                    return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    passwordText.setError("Anna salasana");
+                    return;
+                }
+                if (mAuth.getCurrentUser() == null) {
+                    logIn(email, password);
+                }else{
+                    Toast.makeText(recyclerClass.this, "Already logged in", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         rekButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //rekisterointi tahan
+                //Register
+                dialog.dismiss();
+                Intent intentRegister = new Intent(recyclerClass.this, RegisterActivity.class);
+                startActivity(intentRegister);
             }
         });
+    }
+    public void logOut(){
+        if (mAuth.getCurrentUser() != null) {
+            mAuth.signOut();
+            Toast.makeText(recyclerClass.this, "Sign-out successful", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(recyclerClass.this, "Not logged in", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void logIn(String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password) .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    dialog.dismiss();
+                    //updateUI(user);
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                    Toast.makeText(recyclerClass.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                    // updateUI(null);
+                }
+
+                // ...
+            }
+        });
+    }
+    public void updateUI(FirebaseUser user){
+        String s = user.getEmail()+" Logged in";
+        Toast.makeText(recyclerClass.this, s, Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
