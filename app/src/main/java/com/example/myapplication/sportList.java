@@ -177,7 +177,7 @@ public class sportList extends AppCompatActivity {
                 intent.putExtra("title", titles.get(position));
                 intent.putExtra("address", addresses.get(position) +" " +cities.get(position));
                 intent.putExtra("sport", sports.get(position));
-                intent.putExtra("idchild", String.valueOf(position));
+                intent.putExtra("idchild", String.valueOf(position+1));
                 temp = "";
                 temp2 = "";
                 if(regi.get(position).length() > 1){
