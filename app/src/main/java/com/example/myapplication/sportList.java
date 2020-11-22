@@ -158,7 +158,7 @@ public class sportList extends AppCompatActivity {
 
     public void changeItem(int position) {
         String str1 = Integer.toString(position);
-        Toast.makeText(this, str1, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, str1, Toast.LENGTH_SHORT).show();
 
 
     }
@@ -208,7 +208,7 @@ public class sportList extends AppCompatActivity {
                     temp = temp + specialRegi.get(position) + "\n";
                 }
                 if(temp.length() > 1){
-                    temp = temp.substring(0, temp.length() - 1);;
+                    temp = temp.substring(0, temp.length() - 1);
                 }
                 if(websites.get(position).length() > 1){
                     temp2 = websites.get(position) + "\n";
@@ -250,22 +250,42 @@ public class sportList extends AppCompatActivity {
             case R.id.logIn:
                 createNewContactDialogLogin();
                 return true;
-            case R.id.map:
-                Toast.makeText(this, "kartta painettu", Toast.LENGTH_SHORT).show();
+            case R.id.iceSports:
+                adapter.getCropFilter().filter("icesports");
                 return true;
+
+            case R.id.all:
+                adapter.getCropFilter().filter("all");
+                return true;
+
+            case R.id.stickSports:
+                adapter.getCropFilter().filter("sticksports");
+                return true;
+
+            case R.id.skiing:
+                adapter.getCropFilter().filter("skiing");
+                return true;
+
             case R.id.profile:
-                Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
+                if(mAuth.getUid() != null) {
+                    Toast.makeText(this, mAuth.getUid(), Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.logOut:
                 logOut();
                 return true;
             case R.id.search:
                 return true;
+            case R.id.cropping:
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     public void createNewContactDialogLogin(){
         dialogBuilderLogin = new AlertDialog.Builder(this);

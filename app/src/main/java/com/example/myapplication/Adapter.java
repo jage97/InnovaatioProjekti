@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -49,7 +51,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     LocationManager locationManager;
     int[] images;
     private OnItemClickListener mListener;
-    private List<String> titlesF;
+    private List<String> titlesF, addressesF, citiesF, ratingF, sportsF;
 
     public interface OnItemClickListener{
         void onItemClick(int position);
@@ -59,6 +61,68 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     public Filter getFilter() {
         return exampleFilter;
     }
+
+    public Filter getCropFilter(){
+        return cropFilter;
+    }
+
+    private Filter cropFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<String> filteredList = new ArrayList<>();
+            String filterPattern = constraint.toString().toLowerCase().trim();
+            Log.d(TAG, filterPattern);
+            if (titles.size() != titlesF.size()){
+                titles.clear();
+                titles.addAll(titlesF);
+            }
+
+            if (filterPattern == "icesports") {
+                for (int i = 0; i < sports.size(); i++) {
+                    if (sports.get(i).toLowerCase().trim().contains("jäälajit")) {
+                        String s =titles.get(i)+"  " + sports.get(i) + "  " + addresses.get(i) + "  " + i;
+                        Log.d(TAG, s);
+                        filteredList.add(titles.get(i));
+                    }
+                }
+
+            }else if(filterPattern == "all"){
+                filteredList.addAll(titlesF);
+
+            }else if (filterPattern == "skiing"){
+                for (int i = 0; i < sports.size(); i++) {
+                    if (sports.get(i).toLowerCase().trim().contains("hiihto")) {
+                        String s =titles.get(i)+"  " + sports.get(i) + "  " + addresses.get(i) + "  " + i;
+                        Log.d(TAG, s);
+                        filteredList.add(titles.get(i));
+                    }
+                }
+            }else if (filterPattern == "sticksports"){
+                for (int i = 0; i < sports.size(); i++) {
+                    if (sports.get(i).toLowerCase().trim().contains("mailapelit")) {
+                        String s =titles.get(i)+"  " + sports.get(i) + "  " + addresses.get(i) + "  " + i;
+                        Log.d(TAG, s);
+                        filteredList.add(titles.get(i));
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            titles.clear();
+            titles.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+
+
+
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {

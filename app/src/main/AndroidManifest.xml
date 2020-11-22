@@ -30,7 +30,6 @@
         </activity>
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".sportList"></activity>
-        <activity android:name=".MainActivity"></activity>
         <activity android:name=".recyclerClass" />
     </application>
 

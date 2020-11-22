@@ -32,12 +32,35 @@
         </menu>
     </item>
 
-
     <item
-        android:id="@+id/map"
+        android:id="@+id/cropping"
         android:orderInCategory="100"
-        android:title="Kartta"
-        app:showAsAction="never" />
+        android:title="Rajaus"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/all"
+                android:orderInCategory="100"
+                android:title="Kaikki"
+                app:showAsAction="never" />
+            <item
+            android:id="@+id/iceSports"
+            android:orderInCategory="100"
+            android:title="Jäälajit"
+            app:showAsAction="never" />
+            <item
+                android:id="@+id/stickSports"
+                android:orderInCategory="100"
+                android:title="Mailapelit"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/skiing"
+                android:orderInCategory="100"
+                android:title="Hiihto"
+                app:showAsAction="never" />
+
+        </menu>
+    </item>
 
     <item
         android:id="@+id/search"
