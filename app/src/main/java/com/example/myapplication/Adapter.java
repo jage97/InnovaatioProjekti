@@ -52,9 +52,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     int[] images;
     private OnItemClickListener mListener;
     private List<String> titlesF, addressesF, citiesF, ratingF, sportsF;
+    private List<String> titlesT, addressesT, citiesT, ratingT, sportsT;
 
     public interface OnItemClickListener{
         void onItemClick(int position);
+    }
+    public void listReset(){
+        titlesT.clear();
+        addressesT.clear();
+        citiesT.clear();
+        ratingT.clear();
+        sportsT.clear();
+
+        titles.clear();
+        addresses.clear();
+        cities.clear();
+        rating.clear();
+        sports.clear();
     }
 
     @Override
@@ -70,39 +84,52 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<String> filteredList = new ArrayList<>();
+
             String filterPattern = constraint.toString().toLowerCase().trim();
             Log.d(TAG, filterPattern);
             if (titles.size() != titlesF.size()){
-                titles.clear();
-                titles.addAll(titlesF);
+                listReset();
             }
 
             if (filterPattern == "icesports") {
-                for (int i = 0; i < sports.size(); i++) {
-                    if (sports.get(i).toLowerCase().trim().contains("jäälajit")) {
-                        String s =titles.get(i)+"  " + sports.get(i) + "  " + addresses.get(i) + "  " + i;
-                        Log.d(TAG, s);
-                        filteredList.add(titles.get(i));
+                for (int i = 0; i < sportsF.size(); i++) {
+                    if (sportsF.get(i).toLowerCase().trim().contains("jäälajit")) {
+
+                        filteredList.add(titlesF.get(i));
+                        addressesT.add(addressesF.get(i));
+                        citiesT.add(citiesF.get(i));
+                        sportsT.add(sportsF.get(i));
+                        ratingT.add(ratingF.get(i));
                     }
                 }
 
             }else if(filterPattern == "all"){
                 filteredList.addAll(titlesF);
+                addressesT.addAll(addressesF);
+                citiesT.addAll(citiesF);
+                sportsT.addAll(sportsF);
+                ratingT.addAll(ratingF);
 
             }else if (filterPattern == "skiing"){
-                for (int i = 0; i < sports.size(); i++) {
-                    if (sports.get(i).toLowerCase().trim().contains("hiihto")) {
-                        String s =titles.get(i)+"  " + sports.get(i) + "  " + addresses.get(i) + "  " + i;
-                        Log.d(TAG, s);
-                        filteredList.add(titles.get(i));
+                for (int i = 0; i < sportsF.size(); i++) {
+                    if (sportsF.get(i).toLowerCase().trim().contains("hiihto")) {
+
+                        filteredList.add(titlesF.get(i));
+                        addressesT.add(addressesF.get(i));
+                        citiesT.add(citiesF.get(i));
+                        sportsT.add(sportsF.get(i));
+                        ratingT.add(ratingF.get(i));
                     }
                 }
             }else if (filterPattern == "sticksports"){
-                for (int i = 0; i < sports.size(); i++) {
-                    if (sports.get(i).toLowerCase().trim().contains("mailapelit")) {
-                        String s =titles.get(i)+"  " + sports.get(i) + "  " + addresses.get(i) + "  " + i;
-                        Log.d(TAG, s);
-                        filteredList.add(titles.get(i));
+                for (int i = 0; i < sportsF.size(); i++) {
+                    if (sportsF.get(i).toLowerCase().trim().contains("mailapelit")) {
+
+                        filteredList.add(titlesF.get(i));
+                        addressesT.add(addressesF.get(i));
+                        citiesT.add(citiesF.get(i));
+                        sportsT.add(sportsF.get(i));
+                        ratingT.add(ratingF.get(i));
                     }
                 }
             }
@@ -115,6 +142,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             titles.clear();
+            addresses.clear();
+            rating.clear();
+            sports.clear();
+            cities.clear();
+            addresses.addAll(addressesT);
+            rating.addAll(ratingT);
+            cities.addAll(citiesT);
+            sports.addAll( sportsT);
             titles.addAll((List) results.values);
             notifyDataSetChanged();
         }
@@ -126,17 +161,26 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
     private Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            listReset();
             List<String> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0){
                 filteredList.addAll(titlesF);
+                addressesT.addAll(addressesF);
+                citiesT.addAll(citiesF);
+                sportsT.addAll(sportsF);
+                ratingT.addAll(ratingF);
 
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (int i = 0; i < titles.size(); i++) {
+                for (int i = 0; i < titlesF.size(); i++) {
 
-                    if (titles.get(i).toLowerCase().startsWith(filterPattern)){
-                        filteredList.add(titles.get(i));
+                    if (titlesF.get(i).toLowerCase().startsWith(filterPattern)){
+                        filteredList.add(titlesF.get(i));
+                        addressesT.add(addressesF.get(i));
+                        citiesT.add(citiesF.get(i));
+                        sportsT.add(sportsF.get(i));
+                        ratingT.add(ratingF.get(i));
                     }
                 }
 
@@ -149,6 +193,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             titles.clear();
+
+            addresses.clear();
+            rating.clear();
+            sports.clear();
+            cities.clear();
+            addresses.addAll(addressesT);
+            rating.addAll(ratingT);
+            cities.addAll(citiesT);
+            sports.addAll( sportsT);
+
             titles.addAll((List) results.values);
             notifyDataSetChanged();
         }
@@ -174,6 +228,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
         this.location = location;
 
         titlesF = new ArrayList<>(titles);
+        addressesF = new ArrayList<>(addresses);
+        citiesF = new ArrayList<>(cities);
+        sportsF = new ArrayList<>(sports);
+        ratingF = new ArrayList<>(rating);
+        titlesT = new ArrayList<>();
+        addressesT = new ArrayList<>();
+        citiesT = new ArrayList<>();
+        sportsT = new ArrayList<>();
+        ratingT = new ArrayList<>();
     }
 
     @NonNull

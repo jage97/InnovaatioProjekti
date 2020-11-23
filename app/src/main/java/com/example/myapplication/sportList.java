@@ -276,8 +276,7 @@ public class sportList extends AppCompatActivity {
             case R.id.logOut:
                 logOut();
                 return true;
-            case R.id.search:
-                return true;
+
             case R.id.cropping:
                 return true;
 
